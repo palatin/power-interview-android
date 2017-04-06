@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+
 import javax.inject.Inject;
 
 import example.com.powerinterview.interfaces.IInternetConnectionActivity;
@@ -30,8 +31,8 @@ public class WebClient {
 
     private static HTTPRequest currentRequest;
 
-    @Inject
-    private static AsyncHttpClient client;
+
+    private static AsyncHttpClient client = new AsyncHttpClient();
 
     public static void get(String scriptURL, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         if(isOnline())
@@ -62,11 +63,12 @@ public class WebClient {
         return BASE_URL + relativeUrl;
     }
 
-    public static String getHash() throws EncryptionException {
+    public static String getHash() {// throws EncryptionException {
         SimpleDateFormat df = new SimpleDateFormat("ddMMHH");
         df.setTimeZone(TimeZone.getTimeZone("gmt"));
         String gmtTime = df.format(new Date());
-        return Encrypt.encryptMD5(gmtTime + "SHIA");
+        return null;
+        //return Encrypt.encryptMD5(gmtTime + "SHIA");
     }
 
 
