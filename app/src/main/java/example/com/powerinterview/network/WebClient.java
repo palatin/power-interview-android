@@ -16,8 +16,10 @@ import java.util.TimeZone;
 
 import javax.inject.Inject;
 
+import example.com.powerinterview.exceptions.EncryptionException;
 import example.com.powerinterview.interfaces.IInternetConnectionActivity;
 import example.com.powerinterview.model.HTTPRequest;
+import example.com.powerinterview.utils.Encrypt;
 
 /**
  * Created by Игорь on 30.03.2017.
@@ -30,8 +32,9 @@ public class WebClient {
 
     private static HTTPRequest currentRequest;
 
-    @Inject
+    //@Inject
     private static AsyncHttpClient client;
+
 
     public static void get(String scriptURL, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         if(isOnline())
