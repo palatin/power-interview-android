@@ -21,4 +21,17 @@ public abstract class InterviewObject implements Parcelable {
 
     public abstract String getTitle();
 
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean equals = false;
+        try {
+            if(((InterviewObject)obj).getId() == getId())
+                equals = true;
+        }
+        finally {
+            return equals;
+        }
+    }
+
 }

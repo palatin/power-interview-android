@@ -11,16 +11,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import example.com.powerinterview.R;
 import example.com.powerinterview.adapters.InterviewObjectsAdapter;
 import example.com.powerinterview.interfaces.IEditInterviewObjectListener;
 import example.com.powerinterview.model.InterviewObject;
+import example.com.powerinterview.model.Question;
 
 
 /**
@@ -33,6 +37,8 @@ public class InterviewObjectsFragment extends Fragment {
     private Unbinder unbinder;
     private InterviewObjectsAdapter adapter;
     private ArrayList<InterviewObject> interviewObjects;
+
+
 
     public static InterviewObjectsFragment newInstance(ArrayList<InterviewObject> interviewObjects){
         InterviewObjectsFragment interviewObjectsFragment = new InterviewObjectsFragment();
@@ -72,11 +78,15 @@ public class InterviewObjectsFragment extends Fragment {
 
         }
 
-
-
-
-
         return view;
+    }
+
+    @OnClick(R.id.addQuestionButton)
+    public void addQuestion(View view) {
+        Question question = new Question();
+        question.setId(interviewObjects.get(interviewObjects.size() - 1).getId() + 1);
+        interviewObjects.add(question);
+        adapter.notifyItemInserted(interviewObjects.size());
     }
 
     @Override
