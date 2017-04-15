@@ -32,8 +32,7 @@ public class WebClient {
 
     private static HTTPRequest currentRequest;
 
-    //@Inject
-    private static AsyncHttpClient client;
+    private static AsyncHttpClient client = new AsyncHttpClient();
 
 
     public static void get(String scriptURL, RequestParams params, AsyncHttpResponseHandler responseHandler) {
