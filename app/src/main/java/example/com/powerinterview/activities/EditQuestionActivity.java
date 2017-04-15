@@ -96,11 +96,11 @@ public class EditQuestionActivity extends Activity {
 
     private void initWidgets() {
 
-        final View.OnClickListener customizeWidget = new View.OnClickListener() {
+        final View.OnLongClickListener customizeWidget = new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-
+            public boolean onLongClick(View v) {
                 ((ICustomizableWidget) v).customize();
+                return true;
             }
         };
 
@@ -111,7 +111,7 @@ public class EditQuestionActivity extends Activity {
                     try {
                         View view = widgetsFactory.create(widget, this);
                         questionView.addView(view);
-                        view.setOnClickListener(customizeWidget);
+                        view.setOnLongClickListener(customizeWidget);
                     } catch (FactoryException e) {
                         e.printStackTrace();
                     }
@@ -125,7 +125,7 @@ public class EditQuestionActivity extends Activity {
                 try {
                     View view = widgetsProvider.getEditableSpecificWidget(v, EditQuestionActivity.this);
                     if(view instanceof ICustomizableWidget) {
-                        view.setOnClickListener(customizeWidget);
+                        view.setOnLongClickListener(customizeWidget);
                     }
                     questionView.addView(view);
                 } catch (FactoryException e) {

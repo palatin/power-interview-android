@@ -16,6 +16,7 @@ import example.com.powerinterview.interfaces.IWidgetsProvider;
 import example.com.powerinterview.model.Widget;
 import example.com.powerinterview.ui.PIBootstrapButton;
 import example.com.powerinterview.ui.PIBootstrapLabel;
+import example.com.powerinterview.ui.PISpinner;
 
 /**
  * Created by Игорь on 04.04.2017.
@@ -30,7 +31,7 @@ public class ConstructorWidgetsProvider implements IWidgetsProvider {
     @Inject
     public ConstructorWidgetsProvider(IPIWidgetsFactory widgetsFactory) {
         this.widgetsFactory = widgetsFactory;
-        widgetsClasses = new Class[] {PIBootstrapLabel.class, PIBootstrapButton.class, MaterialSpinner.class};
+        widgetsClasses = new Class[] {PIBootstrapLabel.class, PIBootstrapButton.class, PISpinner.class};
     }
 
     @Override
