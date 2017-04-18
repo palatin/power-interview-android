@@ -3,6 +3,7 @@ package example.com.powerinterview.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -90,7 +91,7 @@ public class EditQuestionActivity extends Activity {
 
                 question.setWidgets(widgets);
                 Intent intent = new Intent();
-                intent.putExtra("question", question);
+                intent.putExtra("question", (Parcelable) question);
                 setResult(RESULT_OK, intent);
                 finish();
             }

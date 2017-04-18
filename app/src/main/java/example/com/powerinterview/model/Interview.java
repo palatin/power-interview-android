@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.xml.transform.Source;
+
 /**
  * Created by Игорь on 18.04.2017.
  */
@@ -22,6 +24,7 @@ public class Interview implements Serializable, Parcelable{
         this.interviewObjects = interviewObjects;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -35,10 +38,6 @@ public class Interview implements Serializable, Parcelable{
     public Interview() {
     }
 
-    protected Interview(Parcel in) {
-        this.interviewObjects = in.createTypedArrayList(InterviewObject.CREATOR);
-    }
-
     public static final Creator<Interview> CREATOR = new Creator<Interview>() {
         @Override
         public Interview createFromParcel(Parcel source) {
@@ -50,4 +49,9 @@ public class Interview implements Serializable, Parcelable{
             return new Interview[size];
         }
     };
+
+    protected Interview(Parcel source) {
+        source.readList(interviewObjects, InterviewObject.class.getClassLoader());
+    }
+
 }

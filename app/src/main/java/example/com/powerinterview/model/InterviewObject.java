@@ -1,5 +1,6 @@
 package example.com.powerinterview.model;
 
+import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
@@ -35,5 +36,7 @@ public abstract class InterviewObject implements Parcelable, Serializable {
             return equals;
         }
     }
+
+
 
 }

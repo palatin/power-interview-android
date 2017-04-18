@@ -1,6 +1,7 @@
 package example.com.powerinterview.activities;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -87,7 +88,7 @@ public class ConstructorActivity extends AppCompatActivity implements IEditInter
     public void editObject(InterviewObject object) {
         if(object instanceof Question) {
             Intent intent = new Intent(ConstructorActivity.this, EditQuestionActivity.class);
-            intent.putExtra("question", object);
+            intent.putExtra("question", (Parcelable) object);
             startActivityForResult(intent, 1);
         }
         if(object instanceof ConditionBlock) {
