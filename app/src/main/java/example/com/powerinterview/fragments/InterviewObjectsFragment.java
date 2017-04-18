@@ -23,6 +23,7 @@ import butterknife.Unbinder;
 import example.com.powerinterview.R;
 import example.com.powerinterview.adapters.InterviewObjectsAdapter;
 import example.com.powerinterview.interfaces.IEditInterviewObjectListener;
+import example.com.powerinterview.model.ConditionBlock;
 import example.com.powerinterview.model.InterviewObject;
 import example.com.powerinterview.model.Question;
 
@@ -82,11 +83,19 @@ public class InterviewObjectsFragment extends Fragment {
     }
 
     @OnClick(R.id.addQuestionButton)
-    public void addQuestion(View view) {
+    public void addQuestion() {
         Question question = new Question();
         question.setId(interviewObjects.get(interviewObjects.size() - 1).getId() + 1);
         interviewObjects.add(question);
-        adapter.notifyItemInserted(interviewObjects.size());
+        adapter.notifyItemInserted(interviewObjects.size() - 1);
+    }
+
+    @OnClick(R.id.conditionButton)
+    public void addCondition() {
+        ConditionBlock conditionBlock = new ConditionBlock();
+        conditionBlock.setId(interviewObjects.get(interviewObjects.size() - 1).getId() + 1);
+        interviewObjects.add(conditionBlock);
+        adapter.notifyItemInserted(interviewObjects.size() - 1);
     }
 
     @Override

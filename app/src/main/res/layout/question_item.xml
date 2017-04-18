@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_list_separator">
 
     <TextView
         android:id="@+id/objectTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:text="TextView"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="16dp"
@@ -38,7 +39,8 @@
         app:layout_constraintTop_toTopOf="@+id/editButton"
         android:layout_marginTop="0dp"
         app:layout_constraintLeft_toRightOf="@+id/editButton"
-        android:layout_marginLeft="32dp" />
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="8dp" />
 
 
 

@@ -17,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import example.com.powerinterview.R;
+import example.com.powerinterview.components.InterviewComponent;
 import example.com.powerinterview.core.PowerInterviewApp;
 import example.com.powerinterview.exceptions.FactoryException;
 import example.com.powerinterview.interfaces.ICustomizableWidget;
@@ -32,11 +33,10 @@ import example.com.powerinterview.model.Widget;
 public class EditQuestionActivity extends Activity {
 
 
-    @Inject
-    IWidgetsProvider widgetsProvider;
 
-    @Inject
-    IPIWidgetsFactory widgetsFactory;
+    private IWidgetsProvider widgetsProvider;
+
+    private IPIWidgetsFactory widgetsFactory;
 
     private Unbinder unbinder;
     private Question question;
@@ -63,7 +63,11 @@ public class EditQuestionActivity extends Activity {
 
         unbinder = ButterKnife.bind(this);
 
-        ((PowerInterviewApp) getApplication()).getInterviewComponent().inject(this);
+        InterviewComponent interviewComponent = ((PowerInterviewApp) getApplication()).getInterviewComponent();
+        widgetsProvider = interviewComponent.getConstructorWidgetsProvider();
+
+        widgetsFactory = interviewComponent.getWidgetsFactory();
+
 
         try {
             question = getIntent().getExtras().getParcelable("question");

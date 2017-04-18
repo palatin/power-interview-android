@@ -19,15 +19,18 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import example.com.powerinterview.R;
+import example.com.powerinterview.dialogs.ConditionDialog;
 import example.com.powerinterview.fragments.InterviewObjectsFragment;
 import example.com.powerinterview.fragments.InterviewObjectsVisualizeFragment;
 import example.com.powerinterview.interfaces.IEditInterviewObjectListener;
+import example.com.powerinterview.model.Condition;
+import example.com.powerinterview.model.ConditionBlock;
 import example.com.powerinterview.model.InterviewObject;
 import example.com.powerinterview.model.Question;
 import example.com.powerinterview.model.Widget;
 import example.com.powerinterview.ui.PIBootstrapButton;
 
-public class ConstructorActivity extends AppCompatActivity implements IEditInterviewObjectListener{
+public class ConstructorActivity extends AppCompatActivity implements IEditInterviewObjectListener, ConditionDialog.OnCompleteCondition {
 
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -87,6 +90,13 @@ public class ConstructorActivity extends AppCompatActivity implements IEditInter
             intent.putExtra("question", object);
             startActivityForResult(intent, 1);
         }
+        if(object instanceof ConditionBlock) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("condition", object);
+            ConditionDialog dialog = new ConditionDialog();
+            dialog.setArguments(bundle);
+            dialog.show(getSupportFragmentManager(), "condition_dialog");
+        }
     }
 
     @Override
@@ -99,6 +109,11 @@ public class ConstructorActivity extends AppCompatActivity implements IEditInter
                 break;
             }
         }
+    }
+
+    @Override
+    public void onCompleteCondition(ConditionBlock conditionBlock) {
+        interviewObjects.set(interviewObjects.indexOf(conditionBlock), conditionBlock);
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -135,7 +150,6 @@ public class ConstructorActivity extends AppCompatActivity implements IEditInter
     @OnClick(R.id.addInterviewButton)
     public void addInterview() {
 
-        
     }
 
     @Override

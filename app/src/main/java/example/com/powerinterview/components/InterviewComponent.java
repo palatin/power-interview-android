@@ -5,6 +5,9 @@ import javax.inject.Singleton;
 import dagger.Component;
 import example.com.powerinterview.factories.InterviewModule;
 import example.com.powerinterview.activities.EditQuestionActivity;
+import example.com.powerinterview.factories.PIWidgetsFactory;
+import example.com.powerinterview.interfaces.IPIWidgetsFactory;
+import example.com.powerinterview.interfaces.IWidgetsProvider;
 
 /**
  * Created by Игорь on 04.04.2017.
@@ -14,7 +17,9 @@ import example.com.powerinterview.activities.EditQuestionActivity;
 @Component(modules = InterviewModule.class)
 public interface InterviewComponent {
 
-    void inject(EditQuestionActivity activity);
+    IWidgetsProvider getConstructorWidgetsProvider();
+
+    IPIWidgetsFactory getWidgetsFactory();
 
 
 }

@@ -2,11 +2,13 @@ package example.com.powerinterview.model;
 
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by Игорь on 01.04.2017.
  */
 
-public abstract class InterviewObject implements Parcelable {
+public abstract class InterviewObject implements Parcelable, Serializable {
 
     private int id;
 

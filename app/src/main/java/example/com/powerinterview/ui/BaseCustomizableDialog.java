@@ -28,25 +28,12 @@ public class BaseCustomizableDialog {
     public void createDialog(final IWidget widget, Context context, List<BaseCustomizableInfo> attributes, List<BaseCustomizableInfo> actions) {
 
         final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-        final List<EditText> attributesEditTexts = new ArrayList<>(attributes.size());
-        final List<EditText> actionsEditTexts = new ArrayList<>(actions.size());
+        final List<EditText> attributesEditTexts = createFields(attributes, context);
+        final List<EditText> actionsEditTexts = createFields(actions, context);
 
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        for (BaseCustomizableInfo info: attributes) {
-            EditText editText = new EditText(context);
-            editText.setTag(info.getAttributeKey());
-            editText.setHint(info.getUserHint().isEmpty() ? info.getAttributeKey() : info.getUserHint());
-            attributesEditTexts.add(editText);
-        }
-
-        for (BaseCustomizableInfo info: actions) {
-            EditText editText = new EditText(context);
-            editText.setTag(info.getAttributeKey());
-            editText.setHint(info.getUserHint().isEmpty() ? info.getAttributeKey() : info.getUserHint());
-            actionsEditTexts.add(editText);
-        }
 
         ScrollView scrollView = new ScrollView(context);
         scrollView.addView(linearLayout);
@@ -99,6 +86,19 @@ public class BaseCustomizableDialog {
 
         alertDialog.show();
 
+    }
+
+    private List<EditText> createFields(List<BaseCustomizableInfo> data, Context context) {
+
+        List<EditText> editTexts = new ArrayList<>();
+        for (BaseCustomizableInfo info: data) {
+            EditText editText = new EditText(context);
+            editText.setTag(info.getAttributeKey());
+            editText.setHint(info.getUserHint().isEmpty() ? info.getAttributeKey() : info.getUserHint());
+            editTexts.add(editText);
+        }
+
+        return editTexts;
     }
 
     public BaseCustomizableInfo createBaseCustomizableInfo(String attributeKey, String userHint) {
