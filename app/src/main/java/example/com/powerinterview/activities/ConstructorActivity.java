@@ -1,8 +1,10 @@
 package example.com.powerinterview.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -11,6 +13,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,6 +154,36 @@ public class ConstructorActivity extends AppCompatActivity implements IEditInter
 
     @OnClick(R.id.addInterviewButton)
     public void addInterview() {
+
+        EditText interviewName = new EditText(this);
+        interviewName.setHint("Interview name");
+
+        EditText password = new EditText(this);
+        password.setHint("Password (not required)");
+
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+        linearLayout.addView(interviewName);
+        linearLayout.addView(password);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Create Interview")
+                .setView(linearLayout)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .create();
+        dialog.show();
 
     }
 

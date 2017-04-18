@@ -17,8 +17,10 @@ import java.util.TimeZone;
 
 import javax.inject.Inject;
 
+import example.com.powerinterview.exceptions.EncryptionException;
 import example.com.powerinterview.interfaces.IInternetConnectionActivity;
 import example.com.powerinterview.model.HTTPRequest;
+import example.com.powerinterview.utils.Encrypt;
 
 /**
  * Created by Игорь on 30.03.2017.
@@ -31,8 +33,8 @@ public class WebClient {
 
     private static HTTPRequest currentRequest;
 
-
     private static AsyncHttpClient client = new AsyncHttpClient();
+
 
     public static void get(String scriptURL, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         if(isOnline())
@@ -63,12 +65,11 @@ public class WebClient {
         return BASE_URL + relativeUrl;
     }
 
-    public static String getHash() {// throws EncryptionException {
+    public static String getHash() throws EncryptionException {
         SimpleDateFormat df = new SimpleDateFormat("ddMMHH");
         df.setTimeZone(TimeZone.getTimeZone("gmt"));
         String gmtTime = df.format(new Date());
-        return null;
-        //return Encrypt.encryptMD5(gmtTime + "SHIA");
+        return Encrypt.encryptMD5(gmtTime + "SHIA");
     }
 
 
