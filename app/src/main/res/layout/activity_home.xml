@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.powerinterview.activities.HomeActivity">
+    tools:context="example.com.powerinterview.activities.HomeActivity">
 
 
     <LinearLayout

@@ -1,5 +1,6 @@
 package example.com.powerinterview.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +21,8 @@ public class HomeActivity extends AppCompatActivity {
 
         if(getSupportActionBar() != null)
             getSupportActionBar().hide();
+
+        initComponents();
     }
 
     private void initComponents() {
@@ -34,6 +37,7 @@ public class HomeActivity extends AppCompatActivity {
         switch (view.getId()) {
 
             case R.id.constructor_card:
+                startActivity(new Intent(this, ConstructorActivity.class));
                 break;
         }
     }
