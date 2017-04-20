@@ -66,6 +66,17 @@ public class LoginActivity extends BaseWorkerActivity implements Validator.Valid
 
         initComponents();
 
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null) {
+
+            User user = (User) bundle.getSerializable("user");
+            if(user != null) {
+                emailEditText.setText(user.getEmail());
+                passwordEditText.setText(user.getPassword());
+                login();
+            }
+        }
+
     }
 
     private void initComponents() {
@@ -78,6 +89,8 @@ public class LoginActivity extends BaseWorkerActivity implements Validator.Valid
 
         validator = new Validator(this);
         validator.setValidationListener(this);
+
+
 
     }
 
@@ -105,7 +118,7 @@ public class LoginActivity extends BaseWorkerActivity implements Validator.Valid
                     try {
                         JSONObject obj = Converter.bytesToJSON(responseBody);
                         if(obj.getBoolean("result")) {
-                            accountManager.storeUser(user);
+                            accountManager.storeAccount(user, LoginActivity.this);
                             accountManager.setToken(obj.getString("token"));
                             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                             finish();
@@ -113,9 +126,13 @@ public class LoginActivity extends BaseWorkerActivity implements Validator.Valid
                         else
                         {
                             showToast(obj.getString("msg"), CustomToast.ToastType.TOAST_ALERT);
+                            accountManager.removeAccount();
                         }
                     } catch (ConvertException | JSONException e) {
                         e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        accountManager.removeAccount();
                     }
                 }
 

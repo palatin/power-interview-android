@@ -1,7 +1,10 @@
 package example.com.powerinterview.core;
 
+
 import android.app.Application;
 
+
+import com.orm.SugarContext;
 import com.squareup.leakcanary.LeakCanary;
 
 import example.com.powerinterview.components.DaggerInterviewComponent;
@@ -19,6 +22,7 @@ import example.com.powerinterview.factories.AuthModule;
 public class PowerInterviewApp extends Application {
 
     private InterviewComponent interviewComponent;
+    private int permission = 1000;
 
     private AuthComponent authComponent;
 
@@ -33,6 +37,9 @@ public class PowerInterviewApp extends Application {
         authComponent = DaggerAuthComponent.builder().authModule(new AuthModule()).build();
 
         interviewComponent = DaggerInterviewComponent.builder().interviewModule(new InterviewModule()).build();
+
+        SugarContext.init(getApplicationContext());
+
     }
 
 

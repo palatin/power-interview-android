@@ -7,6 +7,7 @@ package example.com.powerinterview.utils;
 import android.util.Log;
 
 import com.loopj.android.http.Base64;
+import com.scottyab.aescrypt.AESCrypt;
 
 
 import java.math.BigInteger;
@@ -34,6 +35,27 @@ public class Encrypt {
             "gBDWQ/fb+ZLSxBwbT+F0LJK2rVTWBEIHUjKzCU6wFu1raaDKs8fqsD0Qr0wzwHEL" +
             "GwIDAQAB";
 
+
+    public static String encryptByAES(String input, String key) throws Exception {
+
+
+        try {
+            return AESCrypt.encrypt(key, input);
+        }
+        catch (Exception ex) {
+            throw new Exception();
+        }
+    }
+
+    public static String decryptByAES(String input, String key) throws Exception {
+
+        try {
+            return AESCrypt.decrypt(key, input);
+        }
+        catch (Exception ex) {
+            throw new Exception();
+        }
+    }
 
     public static String encryptByRSA(String key, String input) throws EncryptionException {
 
