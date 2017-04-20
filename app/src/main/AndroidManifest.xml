@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".core.PowerInterviewApp"
@@ -15,20 +16,36 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
+
+        <meta-data
+            android:name="DATABASE"
+            android:value="PowerInterview.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="example.com.powerinterview.model" />
+
         <activity android:name=".activities.LoginActivity">
+
+        </activity>
+        <activity
+            android:name=".activities.ConstructorActivity"
+            android:label="@string/title_activity_constructor"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activities.EditQuestionActivity" />
+        <activity android:name=".activities.HomeActivity" />
+        <activity android:name=".activities.LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.ConstructorActivity"
-            android:label="@string/title_activity_constructor"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".activities.EditQuestionActivity" />
-        <activity android:name=".activities.HomeActivity"></activity>
     </application>
 
 </manifest>
