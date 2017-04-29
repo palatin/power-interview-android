@@ -29,7 +29,7 @@ import example.com.powerinterview.utils.Encrypt;
 public class WebClient {
 
 
-    private static final String BASE_URL = "http://159.203.25.140/childfirst_api/";
+    private static final String BASE_URL = "http://159.203.25.140/powerinterview_api/";
 
     private static HTTPRequest currentRequest;
 

@@ -29,7 +29,7 @@ public class AccountManager {
         account.setToken(token);
     }
 
-    public String getToken(String token) {
+    public String getToken() {
         return account.getToken();
     }
 
