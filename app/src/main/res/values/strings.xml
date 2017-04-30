@@ -21,4 +21,5 @@
     <string name="edit">Edit</string>
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
+    <string name="exception">Some exception occurred</string>
 </resources>

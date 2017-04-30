@@ -81,7 +81,7 @@ public class PIBootstrapButton extends BootstrapButton implements ICustomizableW
         Widget widget = new Widget();
         widget.setClassName(this.getClass().getName());
         widget.setAttributes(getAttributes());
-        widget.setActions(actions);
+        widget.setActions(getActions());
         return widget;
     }
 

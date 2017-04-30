@@ -3,6 +3,7 @@ package example.com.powerinterview.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * Created by Игорь on 06.04.2017.
  */
 
-public class Widget implements Parcelable {
+public class Widget implements Parcelable, Serializable {
 
 
     private String className;

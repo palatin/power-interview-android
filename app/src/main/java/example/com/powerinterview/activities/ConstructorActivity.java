@@ -13,33 +13,53 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cz.msebera.android.httpclient.Header;
 import example.com.powerinterview.R;
+import example.com.powerinterview.core.PowerInterviewApp;
 import example.com.powerinterview.dialogs.ConditionDialog;
+import example.com.powerinterview.exceptions.ConvertException;
+import example.com.powerinterview.exceptions.EncryptionException;
 import example.com.powerinterview.fragments.InterviewObjectsFragment;
 import example.com.powerinterview.fragments.InterviewObjectsVisualizeFragment;
 import example.com.powerinterview.interfaces.IEditInterviewObjectListener;
+import example.com.powerinterview.managers.AccountManager;
 import example.com.powerinterview.model.Condition;
 import example.com.powerinterview.model.ConditionBlock;
+import example.com.powerinterview.model.Interview;
 import example.com.powerinterview.model.InterviewObject;
 import example.com.powerinterview.model.Question;
 import example.com.powerinterview.model.Widget;
+import example.com.powerinterview.network.InterviewClient;
+import example.com.powerinterview.ui.CustomToast;
 import example.com.powerinterview.ui.PIBootstrapButton;
+import example.com.powerinterview.utils.Converter;
 
-public class ConstructorActivity extends AppCompatActivity implements IEditInterviewObjectListener, ConditionDialog.OnCompleteCondition {
+public class ConstructorActivity extends BaseWorkerActivity implements IEditInterviewObjectListener, ConditionDialog.OnCompleteCondition {
 
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ArrayList<InterviewObject> interviewObjects;
+    private InterviewClient client;
+    private AccountManager accountManager;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -70,6 +90,9 @@ public class ConstructorActivity extends AppCompatActivity implements IEditInter
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        client = ((PowerInterviewApp) getApplication()).getInterviewComponent().getInterviewClient();
+        accountManager = ((PowerInterviewApp) getApplication()).getAuthComponent().accoutnManager();
+
 
 
     }
@@ -78,14 +101,14 @@ public class ConstructorActivity extends AppCompatActivity implements IEditInter
 
     private void initInterview() {
         interviewObjects = new ArrayList<>();
-        Question question = new Question();
+        /*Question question = new Question();
         question.setId(1);
         List<Widget> widgets = new ArrayList<>();
         Widget widget = new Widget();
         widget.setClassName(PIBootstrapButton.class.getName());
         widgets.add(widget);
         question.setWidgets(widgets);
-        interviewObjects.add(question);
+        interviewObjects.add(question);*/
     }
 
     @Override
@@ -155,10 +178,17 @@ public class ConstructorActivity extends AppCompatActivity implements IEditInter
     @OnClick(R.id.addInterviewButton)
     public void addInterview() {
 
-        EditText interviewName = new EditText(this);
+        final EditText interviewName = new EditText(this);
+        interviewName.setMaxEms(20);
         interviewName.setHint("Interview name");
 
-        EditText password = new EditText(this);
+        final EditText description = new EditText(this);
+        description.setMaxEms(120);
+        description.setHint("Description, 120 characters max");
+
+        final EditText password = new EditText(this);
+        password.setMaxEms(20);
+        password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         password.setHint("Password (not required)");
 
         LinearLayout linearLayout = new LinearLayout(this);
@@ -166,6 +196,7 @@ public class ConstructorActivity extends AppCompatActivity implements IEditInter
 
         linearLayout.addView(interviewName);
         linearLayout.addView(password);
+        linearLayout.addView(description);
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Create Interview")
@@ -179,12 +210,68 @@ public class ConstructorActivity extends AppCompatActivity implements IEditInter
                 .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        Interview interview = new Interview();
+                        interview.setName(interviewName.getText().toString());
+                        interview.setDescription(description.getText().toString());
+                        interview.setPassword(password.toString());
+                        interview.setInterviewObjects(interviewObjects);
+                        uploadInterview(interview);
                     }
                 })
                 .create();
         dialog.show();
 
+    }
+
+    private void uploadInterview(Interview interview) {
+
+        try {
+            showProgressDialog("Uploading interview....");
+
+            try {
+                client.storeInterviewModule(accountManager.getToken(), interview, new AsyncHttpResponseHandler() {
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+                        dismissProgressDialog();
+
+                        try {
+                            JSONObject obj = Converter.bytesToJSON(responseBody);
+                            if(obj.getBoolean("result")) {
+                                showToast("Interview has been successfully uploaded", CustomToast.ToastType.TOAST_SUCCESS);
+                                finish();
+                            }
+                            else
+                            {
+                                showToast(obj.getString("msg"), CustomToast.ToastType.TOAST_ALERT);
+                                accountManager.removeAccount();
+                            }
+                        } catch (ConvertException | JSONException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            accountManager.removeAccount();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        dismissProgressDialog();
+                        Log.v("Server error message", Arrays.toString(responseBody));
+                        showToast("Server error", CustomToast.ToastType.TOAST_ALERT);
+                    }
+                });
+            } catch (IOException e) {
+                dismissProgressDialog();
+                e.printStackTrace();
+                showToast(getString(R.string.exception), CustomToast.ToastType.TOAST_ALERT);
+            }
+        } catch (EncryptionException e) {
+            dismissProgressDialog();
+            e.printStackTrace();
+            showToast(getString(R.string.exception), CustomToast.ToastType.TOAST_ALERT);
+        }
     }
 
     @Override
