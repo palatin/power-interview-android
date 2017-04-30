@@ -6,9 +6,11 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import example.com.powerinterview.components.InterviewComponent;
 import example.com.powerinterview.core.ConstructorWidgetsProvider;
 import example.com.powerinterview.interfaces.IPIWidgetsFactory;
 import example.com.powerinterview.interfaces.IWidgetsProvider;
+import example.com.powerinterview.network.InterviewClient;
 
 /**
  * Created by Игорь on 04.04.2017.
@@ -27,6 +29,12 @@ public class InterviewModule {
     @Singleton
     IPIWidgetsFactory getWidgetsFactory() {
         return new PIWidgetsFactory();
+    }
+
+    @Provides
+    @Singleton
+    InterviewClient getInterviewClient() {
+        return new InterviewClient();
     }
 
 

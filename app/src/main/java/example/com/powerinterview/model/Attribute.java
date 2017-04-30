@@ -3,11 +3,13 @@ package example.com.powerinterview.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by Игорь on 06.04.2017.
  */
 
-public class Attribute implements Parcelable{
+public class Attribute implements Parcelable, Serializable {
 
 
     private String key;

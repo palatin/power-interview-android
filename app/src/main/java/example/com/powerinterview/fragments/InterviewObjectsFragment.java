@@ -85,7 +85,7 @@ public class InterviewObjectsFragment extends Fragment {
     @OnClick(R.id.addQuestionButton)
     public void addQuestion() {
         Question question = new Question();
-        question.setId(interviewObjects.get(interviewObjects.size() - 1).getId() + 1);
+        question.setId(interviewObjects.size());
         interviewObjects.add(question);
         adapter.notifyItemInserted(interviewObjects.size() - 1);
     }
@@ -93,7 +93,7 @@ public class InterviewObjectsFragment extends Fragment {
     @OnClick(R.id.conditionButton)
     public void addCondition() {
         ConditionBlock conditionBlock = new ConditionBlock();
-        conditionBlock.setId(interviewObjects.get(interviewObjects.size() - 1).getId() + 1);
+        conditionBlock.setId(interviewObjects.size());
         interviewObjects.add(conditionBlock);
         adapter.notifyItemInserted(interviewObjects.size() - 1);
     }

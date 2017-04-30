@@ -1,8 +1,15 @@
 package example.com.powerinterview.model;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.List;
 
@@ -13,6 +20,10 @@ import javax.xml.transform.Source;
  */
 
 public class Interview implements Serializable, Parcelable{
+
+    private String name;
+    private String description;
+    private String password;
 
     private List<InterviewObject> interviewObjects;
 
@@ -25,6 +36,33 @@ public class Interview implements Serializable, Parcelable{
     }
 
 
+    public Interview() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -32,10 +70,17 @@ public class Interview implements Serializable, Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeString(this.description);
+        dest.writeString(this.password);
         dest.writeTypedList(this.interviewObjects);
     }
 
-    public Interview() {
+    protected Interview(Parcel in) {
+        this.name = in.readString();
+        this.description = in.readString();
+        this.password = in.readString();
+        in.readList(interviewObjects, InterviewObject.class.getClassLoader());
     }
 
     public static final Creator<Interview> CREATOR = new Creator<Interview>() {
@@ -50,8 +95,17 @@ public class Interview implements Serializable, Parcelable{
         }
     };
 
-    protected Interview(Parcel source) {
-        source.readList(interviewObjects, InterviewObject.class.getClassLoader());
-    }
+    public InputStream getInputStream() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
 
+
+        oos.writeObject(this);
+
+        oos.flush();
+        oos.close();
+
+        InputStream is = new ByteArrayInputStream(baos.toByteArray());
+        return is;
+    }
 }
