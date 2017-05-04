@@ -18,26 +18,21 @@ import example.com.powerinterview.model.Widget;
  * Created by Игорь on 04.04.2017.
  */
 
-public class PIWidgetsFactory  implements IPIWidgetsFactory{
+public class PIWidgetsFactory  implements IPIWidgetsFactory {
 
 
-    public View create(Widget widget, Context context) throws FactoryException {
+    public IWidget create(Widget widget, Context context) throws FactoryException {
 
-        View view = null;
+        IWidget iWidget = null;
         try {
-            view = (View) Class.forName(widget.getClassName()).getDeclaredConstructor(Context.class).newInstance(context);
-            List<Attribute> attributes = widget.getAttributes();
-            List<Action> actions = widget.getActions();
-            if(attributes != null && !attributes.isEmpty())
-                ((IWidget) view).setAttributes(attributes);
-            if(actions != null && !actions.isEmpty())
-                ((IWidget) view).setActions(actions);
+            iWidget = (IWidget) Class.forName(widget.getClassName()).getDeclaredConstructor(List.class, List.class, Context.class)
+                    .newInstance(new Object[] {widget.getAttributes(), widget.getActions(), context});
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new FactoryException(ex.getMessage());
         }
 
-        return view;
+        return iWidget;
     }
 
 }

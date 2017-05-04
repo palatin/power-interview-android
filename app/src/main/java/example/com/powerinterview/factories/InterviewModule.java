@@ -1,13 +1,10 @@
 package example.com.powerinterview.factories;
 
-import android.view.View;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import example.com.powerinterview.components.InterviewComponent;
-import example.com.powerinterview.core.ConstructorWidgetsProvider;
+import example.com.powerinterview.widgets.ConstructorWidgetsProvider;
 import example.com.powerinterview.interfaces.IPIWidgetsFactory;
 import example.com.powerinterview.interfaces.IWidgetsProvider;
 import example.com.powerinterview.network.InterviewClient;

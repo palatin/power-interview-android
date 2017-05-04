@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -26,7 +25,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,15 +40,12 @@ import example.com.powerinterview.fragments.InterviewObjectsFragment;
 import example.com.powerinterview.fragments.InterviewObjectsVisualizeFragment;
 import example.com.powerinterview.interfaces.IEditInterviewObjectListener;
 import example.com.powerinterview.managers.AccountManager;
-import example.com.powerinterview.model.Condition;
 import example.com.powerinterview.model.ConditionBlock;
 import example.com.powerinterview.model.Interview;
 import example.com.powerinterview.model.InterviewObject;
 import example.com.powerinterview.model.Question;
-import example.com.powerinterview.model.Widget;
 import example.com.powerinterview.network.InterviewClient;
 import example.com.powerinterview.ui.CustomToast;
-import example.com.powerinterview.ui.PIBootstrapButton;
 import example.com.powerinterview.utils.Converter;
 
 public class ConstructorActivity extends BaseWorkerActivity implements IEditInterviewObjectListener, ConditionDialog.OnCompleteCondition {
