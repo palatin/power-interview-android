@@ -24,6 +24,7 @@ public class PowerInterviewApp extends Application {
     private InterviewComponent interviewComponent;
     private int permission = 1000;
 
+
     private AuthComponent authComponent;
 
     @Override public void onCreate() {

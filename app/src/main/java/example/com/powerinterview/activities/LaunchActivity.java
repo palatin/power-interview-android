@@ -72,7 +72,7 @@ public class LaunchActivity extends AppCompatActivity {
     private void loadAccount() {
         User user = null;
         try {
-            user = ((PowerInterviewApp) getApplication()).getAuthComponent().accoutnManager().getAccount(this);
+            user = ((PowerInterviewApp) getApplication()).getAuthComponent().accountManager().getAccount(this);
         } catch (Exception e) {
             e.printStackTrace();
         }

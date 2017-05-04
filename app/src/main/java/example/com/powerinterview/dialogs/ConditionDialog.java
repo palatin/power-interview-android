@@ -32,7 +32,7 @@ import example.com.powerinterview.model.ConditionBlock;
 
 public class ConditionDialog extends DialogFragment {
 
-    public static interface OnCompleteCondition {
+    public interface OnCompleteCondition {
         void onCompleteCondition(ConditionBlock conditionBlock);
     }
 

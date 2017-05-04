@@ -8,6 +8,7 @@ import example.com.powerinterview.activities.EditQuestionActivity;
 import example.com.powerinterview.factories.PIWidgetsFactory;
 import example.com.powerinterview.interfaces.IPIWidgetsFactory;
 import example.com.powerinterview.interfaces.IWidgetsProvider;
+import example.com.powerinterview.managers.InterviewManager;
 import example.com.powerinterview.network.InterviewClient;
 
 /**
@@ -23,6 +24,8 @@ public interface InterviewComponent {
     IPIWidgetsFactory getWidgetsFactory();
 
     InterviewClient getInterviewClient();
+
+    InterviewManager getInterviewManager();
 
 
 }
