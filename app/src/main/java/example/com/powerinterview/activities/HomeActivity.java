@@ -7,6 +7,7 @@ import android.view.View;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Optional;
 import butterknife.Unbinder;
 import example.com.powerinterview.R;
 
@@ -31,11 +32,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-
-    @OnClick(R.id.constructor_card)
+    @OnClick({R.id.interview_card, R.id.constructor_card})
     public void onMenuItemClicked(View view) {
         switch (view.getId()) {
-
+            case R.id.interview_card:
+                startActivity(new Intent(this, InterviewPickerActivity.class));
+                break;
             case R.id.constructor_card:
                 startActivity(new Intent(this, ConstructorActivity.class));
                 break;

@@ -18,6 +18,6 @@ public interface AuthComponent {
 
     AuthClient authClient();
 
-    AccountManager accoutnManager();
+    AccountManager accountManager();
 
 }

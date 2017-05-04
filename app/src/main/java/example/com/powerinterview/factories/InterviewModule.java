@@ -10,6 +10,8 @@ import example.com.powerinterview.components.InterviewComponent;
 import example.com.powerinterview.core.ConstructorWidgetsProvider;
 import example.com.powerinterview.interfaces.IPIWidgetsFactory;
 import example.com.powerinterview.interfaces.IWidgetsProvider;
+import example.com.powerinterview.managers.InterviewManager;
+import example.com.powerinterview.model.Interview;
 import example.com.powerinterview.network.InterviewClient;
 
 /**
@@ -35,6 +37,12 @@ public class InterviewModule {
     @Singleton
     InterviewClient getInterviewClient() {
         return new InterviewClient();
+    }
+
+    @Provides
+    @Singleton
+    InterviewManager getInterviewManager() {
+        return new InterviewManager();
     }
 
 

@@ -24,7 +24,7 @@ public class CustomToast {
     private Toast toast;
     private Integer color = null;
 
-    public enum ToastType {TOAST_WITHOUT_IMAGE, TOAST_ALERT, TOAST_SUCCESS};
+    public enum ToastType {TOAST_WITHOUT_IMAGE, TOAST_ALERT, TOAST_SUCCESS}
 
     private ToastType type;
 

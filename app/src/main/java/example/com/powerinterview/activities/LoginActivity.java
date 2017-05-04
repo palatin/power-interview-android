@@ -85,7 +85,7 @@ public class LoginActivity extends BaseWorkerActivity implements Validator.Valid
 
         authComponent = ((PowerInterviewApp) getApplication()).getAuthComponent();
         client = authComponent.authClient();
-        accountManager = authComponent.accoutnManager();
+        accountManager = authComponent.accountManager();
 
         validator = new Validator(this);
         validator.setValidationListener(this);

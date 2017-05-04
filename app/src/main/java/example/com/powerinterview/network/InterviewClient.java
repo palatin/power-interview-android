@@ -9,9 +9,13 @@ import example.com.powerinterview.exceptions.EncryptionException;
 import example.com.powerinterview.model.Interview;
 import example.com.powerinterview.utils.Encrypt;
 
-/**
- * Created by Игорь on 20.04.2017.
- */
+
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import example.com.powerinterview.exceptions.EncryptionException;
+import example.com.powerinterview.utils.Encrypt;
+
 
 public class InterviewClient {
 
@@ -29,5 +33,22 @@ public class InterviewClient {
 
     }
 
+
+    public void getInterviewsModules(String token, JsonHttpResponseHandler handler) throws EncryptionException {
+
+        RequestParams params = new RequestParams();
+        params.add("code", Encrypt.encryptByRSA(Encrypt.publicServerKey, token));
+        params.add("hash", WebClient.getHash());
+        WebClient.post("get_interviews_modules.php", params, handler);
+    }
+
+    public void getInterviewModule(String token, String interviewId, AsyncHttpResponseHandler responseHandler) throws EncryptionException {
+
+        RequestParams params = new RequestParams();
+        params.add("code", Encrypt.encryptByRSA(Encrypt.publicServerKey, token));
+        params.add("interview_id", interviewId);
+        params.add("hash", WebClient.getHash());
+        WebClient.post("get_interview_module.php", params, responseHandler);
+    }
 
 }
