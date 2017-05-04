@@ -16,7 +16,7 @@ import example.com.powerinterview.model.Widget;
 public interface IPIWidgetsFactory  {
 
 
-    View create(Widget widget, Context context) throws FactoryException;
+    IWidget create(Widget widget, Context context) throws FactoryException;
 
 
 

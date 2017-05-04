@@ -51,21 +51,21 @@
             android:orientation="horizontal"
             android:layout_weight="0.9">
 
-            <com.beardedhen.androidbootstrap.BootstrapButton
+            <example.com.powerinterview.ui.IOSStyledButton
                 android:id="@+id/cancelButton"
+                android:background="@color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:bootstrapSize="lg"
                 android:layout_weight="1"
                 app:bootstrapBrand="danger"
                 android:text="@string/cancel" />
 
-            <com.beardedhen.androidbootstrap.BootstrapButton
+            <example.com.powerinterview.ui.IOSStyledButton
                 android:id="@+id/doneButton"
+                android:background="@color/transparent"
+                android:textColor="@color/iosButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:bootstrapBrand="success"
-                app:bootstrapSize="lg"
                 android:layout_weight="1"
                 android:text="@string/done" />
 

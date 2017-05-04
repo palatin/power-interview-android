@@ -1,5 +1,8 @@
 package example.com.powerinterview.interfaces;
 
+import android.content.Context;
+import android.view.View;
+
 import java.util.List;
 import java.util.Map;
 
@@ -19,5 +22,7 @@ public interface IWidget {
     void setActions(List<Action> actions);
 
     List<Action> getActions();
+
+    View getView();
 
 }
