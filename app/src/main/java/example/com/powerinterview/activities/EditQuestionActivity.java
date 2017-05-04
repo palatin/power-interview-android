@@ -16,6 +16,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import example.com.powerinterview.R;
 import example.com.powerinterview.components.InterviewComponent;
@@ -23,9 +24,11 @@ import example.com.powerinterview.core.PowerInterviewApp;
 import example.com.powerinterview.exceptions.FactoryException;
 import example.com.powerinterview.interfaces.ICustomizableWidget;
 import example.com.powerinterview.interfaces.IPIWidgetsFactory;
+import example.com.powerinterview.interfaces.IWidget;
 import example.com.powerinterview.interfaces.IWidgetsProvider;
 import example.com.powerinterview.model.Question;
 import example.com.powerinterview.model.Widget;
+import example.com.powerinterview.ui.IOSStyledButton;
 
 /**
  * Created by Игорь on 01.04.2017.
@@ -37,7 +40,7 @@ public class EditQuestionActivity extends Activity {
 
     private IWidgetsProvider widgetsProvider;
 
-    private IPIWidgetsFactory widgetsFactory;
+
 
     private Unbinder unbinder;
     private Question question;
@@ -49,9 +52,11 @@ public class EditQuestionActivity extends Activity {
     @BindView(R.id.questionView)
     LinearLayout questionView;
 
-    @BindView(R.id.doneButton)
-    BootstrapButton doneButton;
 
+
+
+    private List<ICustomizableWidget> customizableWidgets;
+    private IWidget[] widgets;
 
 
 
@@ -67,57 +72,29 @@ public class EditQuestionActivity extends Activity {
         InterviewComponent interviewComponent = ((PowerInterviewApp) getApplication()).getInterviewComponent();
         widgetsProvider = interviewComponent.getConstructorWidgetsProvider();
 
-        widgetsFactory = interviewComponent.getWidgetsFactory();
-
-
         try {
             question = getIntent().getExtras().getParcelable("question");
         } catch (NullPointerException ex) {
             ex.printStackTrace();
         }
 
+        customizableWidgets = new ArrayList<>();
+
 
         initWidgets();
-
-        doneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                List<Widget> widgets = new ArrayList<>();
-
-                for (int i = 0; i < questionView.getChildCount(); i++) {
-                    widgets.add(((ICustomizableWidget)questionView.getChildAt(i)).getWidget());
-                }
-
-                question.setWidgets(widgets);
-                Intent intent = new Intent();
-                intent.putExtra("question", (Parcelable) question);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
 
     }
 
     private void initWidgets() {
 
-        final View.OnLongClickListener customizeWidget = new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                ((ICustomizableWidget) v).customize();
-                return true;
-            }
-        };
-
-
         if (question != null) {
             if(question.getWidgets() != null) {
                 for (Widget widget : question.getWidgets()) {
                     try {
-                        View view = widgetsFactory.create(widget, this);
-                        questionView.addView(view);
-                        view.setOnLongClickListener(customizeWidget);
-                    } catch (FactoryException e) {
+                        ICustomizableWidget customizableWidget = widgetsProvider.getEditableSpecificWidget(widget, EditQuestionActivity.this);
+                        customizableWidgets.add(customizableWidget);
+                        questionView.addView(((IWidget) customizableWidget).getView());
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -128,12 +105,10 @@ public class EditQuestionActivity extends Activity {
             @Override
             public void onClick(View v) {
                 try {
-                    View view = widgetsProvider.getEditableSpecificWidget(v, EditQuestionActivity.this);
-                    if(view instanceof ICustomizableWidget) {
-                        view.setOnLongClickListener(customizeWidget);
-                    }
-                    questionView.addView(view);
-                } catch (FactoryException e) {
+                    ICustomizableWidget customizableWidget = widgetsProvider.getEditableSpecificWidget(widgets[(int) v.getTag()], EditQuestionActivity.this);
+                    customizableWidgets.add(customizableWidget);
+                    questionView.addView(((IWidget) customizableWidget).getView());
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -141,17 +116,40 @@ public class EditQuestionActivity extends Activity {
 
 
         try {
-            View[] views = widgetsProvider.getWidgets(EditQuestionActivity.this);
-            for (View view: views) {
-                //TODO add visitor pattern
+            widgets = widgetsProvider.getWidgets(EditQuestionActivity.this);
+            int i = 0;
+            for (IWidget widget: widgets) {
+                View view = widget.getView();
+                view.setTag(i);
                 view.setOnClickListener(createWidget);
                 widgetsLayout.addView(view);
+                i++;
             }
         } catch (FactoryException e) {
             e.printStackTrace();
         }
 
 
+    }
+
+    @OnClick(R.id.cancelButton)
+    public void onCancel(){
+        finish();
+    }
+
+    @OnClick(R.id.doneButton)
+    public void onDone(){
+        List<Widget> widgets = new ArrayList<>();
+
+        for (ICustomizableWidget widget: customizableWidgets) {
+            widgets.add(widget.getWidget());
+        }
+
+        question.setWidgets(widgets);
+        Intent intent = new Intent();
+        intent.putExtra("question", (Parcelable) question);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override

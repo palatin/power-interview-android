@@ -1,4 +1,4 @@
-package example.com.powerinterview.ui;
+package example.com.powerinterview.widgets;
 
 import android.app.AlertDialog;
 import android.content.Context;
