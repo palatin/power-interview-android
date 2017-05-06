@@ -29,7 +29,7 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="example.com.powerinterview.model" />
 
-        <activity android:name=".activities.LoginActivity"></activity>
+        <activity android:name=".activities.LoginActivity" />
         <activity
             android:name=".activities.ConstructorActivity"
             android:label="@string/title_activity_constructor"
@@ -43,7 +43,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.InterviewPickerActivity"></activity>
+        <activity android:name=".activities.InterviewPickerActivity" />
+        <activity android:name=".activities.InterviewActivity"></activity>
     </application>
 
 </manifest>

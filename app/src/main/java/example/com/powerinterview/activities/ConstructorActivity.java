@@ -86,7 +86,7 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
         tabLayout.setupWithViewPager(mViewPager);
 
         client = ((PowerInterviewApp) getApplication()).getInterviewComponent().getInterviewClient();
-        accountManager = ((PowerInterviewApp) getApplication()).getAuthComponent().accoutnManager();
+        accountManager = ((PowerInterviewApp) getApplication()).getAuthComponent().accountManager();
 
 
 

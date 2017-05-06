@@ -1,13 +1,11 @@
 package example.com.powerinterview.activities;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -15,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +24,13 @@ import butterknife.Unbinder;
 import cz.msebera.android.httpclient.Header;
 import example.com.powerinterview.R;
 import example.com.powerinterview.adapters.InterviewsAdapter;
-import example.com.powerinterview.core.AppConfig;
 import example.com.powerinterview.core.PowerInterviewApp;
 import example.com.powerinterview.exceptions.ConvertException;
 import example.com.powerinterview.exceptions.EncryptionException;
 import example.com.powerinterview.interfaces.InterviewPick;
 import example.com.powerinterview.managers.AccountManager;
 import example.com.powerinterview.managers.InterviewManager;
-import example.com.powerinterview.model.InterviewModule;
+import example.com.powerinterview.model.InterviewTemplate;
 import example.com.powerinterview.network.InterviewClient;
 import example.com.powerinterview.utils.Converter;
 
@@ -41,7 +39,7 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
 
     private InterviewClient client;
     private AccountManager accountManager;
-    private List<InterviewModule> interviewModules;
+    private List<InterviewTemplate> interviewTemplates;
     private InterviewsAdapter adapter;
     private Unbinder unbinder;
     private InterviewManager interviewManager;
@@ -63,8 +61,8 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
 
     private void loadInterviews() {
 
-        interviewModules = new ArrayList<>();
-        adapter = new InterviewsAdapter(interviewModules, this, recyclerView);
+        interviewTemplates = new ArrayList<>();
+        adapter = new InterviewsAdapter(interviewTemplates, this, recyclerView);
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -80,19 +78,19 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
                     for (int i = 0; i < response.length(); i++) {
                         try {
                             JSONObject moduleJSON = response.getJSONObject(i);
-                            InterviewModule module = new InterviewModule();
+                            InterviewTemplate module = new InterviewTemplate();
                             module.setId(moduleJSON.getLong("id"));
                             module.setName(moduleJSON.getString("name"));
                             module.setAuthor(moduleJSON.getString("author"));
                             module.setDescription(moduleJSON.getString("description"));
-                            interviewModules.add(module);
+                            interviewTemplates.add(module);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
                     }
-                    if(interviewModules.size() > 0)
-                        adapter.notifyItemRangeInserted(0, interviewModules.size());
+                    if(interviewTemplates.size() > 0)
+                        adapter.notifyItemRangeInserted(0, interviewTemplates.size());
                 }
 
                 @Override
@@ -116,9 +114,23 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
     }
 
     @Override
-    public void onInterviewPicked(final InterviewModule interviewModule) {
+    public void onInterviewPicked(InterviewTemplate interviewTemplate) {
+
         try {
-            client.getInterviewModule(accountManager.getToken(), String.valueOf(interviewModule.getId()), new AsyncHttpResponseHandler() {
+            File file = interviewManager.getFileTemplateById(interviewTemplate.getId(), getApplicationContext());
+        } catch (FileNotFoundException e) {
+            loadTemplate(interviewTemplate);
+        }
+
+
+    }
+
+    private void loadTemplate(final InterviewTemplate interviewTemplate) {
+
+        try {
+
+            showProgressDialog("Loading template....");
+            client.getInterviewModule(accountManager.getToken(), String.valueOf(interviewTemplate.getId()), new AsyncHttpResponseHandler() {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -134,28 +146,35 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
                                 } catch (ConvertException e) {
                                     e.printStackTrace();
                                 }
+                                finally {
+                                    dismissProgressDialog();
+                                }
                             }
                             else if(header.getValue().equals("application/octet-stream")) {
                                 try {
-                                    interviewManager.storeInterviewModule(interviewModule, getApplicationContext(), responseBody);
+                                    interviewManager.storeInterviewTemplate(interviewTemplate, getApplicationContext(), responseBody);
+                                    File file = interviewManager.getFileTemplateById(interviewTemplate.getId(), getApplicationContext());
+                                    Intent intent = new Intent(InterviewPickerActivity.this, InterviewActivity.class);
+                                    intent.putExtra("template", file);
                                 } catch (IOException e) {
                                     e.printStackTrace();
+                                    dismissProgressDialog();
                                 }
                             }
                         }
                     }
-
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
                     writeDebugLog("Interview loader", "exception from server, status code: " + statusCode);
-
+                    dismissProgressDialog();
                 }
             });
         } catch (EncryptionException e) {
             e.printStackTrace();
+            dismissProgressDialog();
         }
     }
 }

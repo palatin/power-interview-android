@@ -1,6 +1,6 @@
 package example.com.powerinterview.interfaces;
 
-import example.com.powerinterview.model.InterviewModule;
+import example.com.powerinterview.model.InterviewTemplate;
 
 /**
  * Created by Игорь on 03.05.2017.
@@ -9,6 +9,6 @@ import example.com.powerinterview.model.InterviewModule;
 public interface InterviewPick {
 
 
-    void onInterviewPicked(InterviewModule interviewModule);
+    void onInterviewPicked(InterviewTemplate interviewTemplate);
 
 }
