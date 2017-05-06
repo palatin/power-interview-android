@@ -12,11 +12,12 @@ import com.orm.dsl.Unique;
 public class InterviewTemplate {
 
 
-    private transient Long id;
+    private Long id;
     private String name;
     private String author;
     private String description;
 
+    public InterviewTemplate() {}
 
     public String getName() {
         return name;
