@@ -32,6 +32,7 @@ import example.com.powerinterview.managers.AccountManager;
 import example.com.powerinterview.managers.InterviewManager;
 import example.com.powerinterview.model.InterviewTemplate;
 import example.com.powerinterview.network.InterviewClient;
+import example.com.powerinterview.ui.CustomToast;
 import example.com.powerinterview.utils.Converter;
 
 public class InterviewPickerActivity extends BaseWorkerActivity implements InterviewPick {
@@ -118,9 +119,15 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
 
         try {
             File file = interviewManager.getFileTemplateById(interviewTemplate.getId(), getApplicationContext());
-        } catch (FileNotFoundException e) {
+            Intent intent = new Intent(InterviewPickerActivity.this, InterviewActivity.class);
+            intent.putExtra("template", file);
+            startActivity(intent);
+            finish();
+        } catch (NullPointerException | FileNotFoundException e) {
             loadTemplate(interviewTemplate);
         }
+        
+
 
 
     }
@@ -156,9 +163,12 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
                                     File file = interviewManager.getFileTemplateById(interviewTemplate.getId(), getApplicationContext());
                                     Intent intent = new Intent(InterviewPickerActivity.this, InterviewActivity.class);
                                     intent.putExtra("template", file);
+                                    startActivity(intent);
+                                    finish();
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                     dismissProgressDialog();
+                                    showToast(e.getMessage(), CustomToast.ToastType.TOAST_ALERT);
                                 }
                             }
                         }

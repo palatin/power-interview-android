@@ -22,8 +22,10 @@ public class InterviewManager {
 
     public void storeInterviewTemplate(InterviewTemplate template, Context context, byte[] bytes) throws IOException {
         File file = new File(context.getFilesDir().getAbsolutePath() + "/templates");
-        if(file.mkdir()) {
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(file.getAbsolutePath() + "/" + template.getName() + template.getId() + ".pif")));
+        if(!file.exists())
+            file.mkdir();
+        if(file.exists()) {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File(file.getAbsolutePath() + "/" + template.getName() + "_" + template.getId() + ".pif")));
             bos.write(bytes);
             bos.flush();
             bos.close();
@@ -40,10 +42,16 @@ public class InterviewManager {
 
     public File getFileTemplateById(long id, Context context) throws FileNotFoundException {
         InterviewTemplate template = getInterviewTemplateById(id);
-        File file = new File(context.getFilesDir().getAbsolutePath() + "/modules/" + template.getName() + template.getId() + ".pif");
-        if(!file.exists())
+        File file = new File(context.getFilesDir().getAbsolutePath() + "/templates/" + template.getName() + "_" + template.getId() + ".pif");
+        if(!file.exists()) {
+            removeTemplate(id);
             throw new FileNotFoundException("Template file not found");
+        }
         return file;
+    }
+
+    private void removeTemplate(long id) {
+        SugarRecord.delete(getInterviewTemplateById(id));
     }
 
 
