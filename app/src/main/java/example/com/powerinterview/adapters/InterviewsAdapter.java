@@ -11,8 +11,7 @@ import java.util.List;
 
 import example.com.powerinterview.R;
 import example.com.powerinterview.interfaces.InterviewPick;
-import example.com.powerinterview.model.Interview;
-import example.com.powerinterview.model.InterviewModule;
+import example.com.powerinterview.model.InterviewTemplate;
 
 /**
  * Created by Игорь on 29.04.2017.
@@ -20,13 +19,13 @@ import example.com.powerinterview.model.InterviewModule;
 
 public class InterviewsAdapter extends RecyclerView.Adapter<InterviewsAdapter.ViewHolder> implements View.OnClickListener {
 
-    private List<InterviewModule> interviewModules;
+    private List<InterviewTemplate> interviewTemplates;
     private InterviewPick interviewPick;
     private RecyclerView recyclerView;
 
 
-    public InterviewsAdapter(List<InterviewModule> interviewModules, InterviewPick interviewPick, RecyclerView recyclerView) {
-        this.interviewModules = interviewModules;
+    public InterviewsAdapter(List<InterviewTemplate> interviewTemplates, InterviewPick interviewPick, RecyclerView recyclerView) {
+        this.interviewTemplates = interviewTemplates;
         this.interviewPick = interviewPick;
         this.recyclerView = recyclerView;
     }
@@ -48,22 +47,22 @@ public class InterviewsAdapter extends RecyclerView.Adapter<InterviewsAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        InterviewModule interviewModule = interviewModules.get(position);
-        holder.interviewName.setText(interviewModule.getName());
-        holder.interviewAuthor.setText("Created by " + interviewModule.getAuthor());
-        holder.interviewDescription.setText(interviewModule.getDescription());
+        InterviewTemplate interviewTemplate = interviewTemplates.get(position);
+        holder.interviewName.setText(interviewTemplate.getName());
+        holder.interviewAuthor.setText("Created by " + interviewTemplate.getAuthor());
+        holder.interviewDescription.setText(interviewTemplate.getDescription());
     }
 
     @Override
     public int getItemCount() {
-        return interviewModules.size();
+        return interviewTemplates.size();
     }
 
     @Override
     public void onClick(View v) {
         int position = recyclerView.indexOfChild(v);
         if(position != -1)
-            interviewPick.onInterviewPicked(interviewModules.get(position));
+            interviewPick.onInterviewPicked(interviewTemplates.get(position));
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

@@ -1,12 +1,18 @@
 package example.com.powerinterview.model;
 
+import com.orm.dsl.Table;
+import com.orm.dsl.Unique;
+
 /**
  * Created by Игорь on 29.04.2017.
  */
 
-public class InterviewModule {
 
-    private long id;
+@Table
+public class InterviewTemplate {
+
+
+    private transient Long id;
     private String name;
     private String author;
     private String description;
@@ -36,11 +42,11 @@ public class InterviewModule {
         this.description = description;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }
