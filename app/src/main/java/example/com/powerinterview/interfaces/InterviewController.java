@@ -6,5 +6,6 @@ package example.com.powerinterview.interfaces;
 
 public interface InterviewController {
 
+    void moveTo(int id);
 
 }

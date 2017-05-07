@@ -40,3 +40,7 @@ captures/
 *.jks
 
 \.idea/misc\.xml
+
+\.idea/libraries/
+
+\.idea/inspectionProfiles/Project_Default\.xml

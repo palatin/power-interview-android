@@ -37,7 +37,7 @@ public class Action implements Parcelable, Serializable {
     public boolean equals(Object obj) {
         boolean equals = false;
         try {
-            if(((Attribute)obj).getKey().equals(getKey()))
+            if(((Action)obj).getKey().equals(getKey()))
                 equals = true;
         }
         finally {

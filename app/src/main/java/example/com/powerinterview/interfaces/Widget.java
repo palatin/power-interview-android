@@ -25,4 +25,6 @@ public interface Widget {
 
     View getView();
 
+    void setActionListener(ActionListener listener);
+
 }

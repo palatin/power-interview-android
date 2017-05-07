@@ -61,4 +61,15 @@ public class BaseInterviewController implements InterviewController {
         }
     }
 
+    @Override
+    public void moveTo(int id) {
+        currentId = id;
+        try {
+            parseInterviewObjects();
+        } catch (InterviewElementNotFoundException e) {
+            e.printStackTrace();
+        } catch (FactoryException e) {
+            e.printStackTrace();
+        }
+    }
 }
