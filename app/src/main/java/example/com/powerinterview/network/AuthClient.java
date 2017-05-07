@@ -13,6 +13,7 @@ import example.com.powerinterview.utils.Encrypt;
 
 public class AuthClient {
 
+
     public void login(User user, AsyncHttpResponseHandler handler) throws EncryptionException {
 
         RequestParams params = new RequestParams();

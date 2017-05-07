@@ -7,12 +7,8 @@ import android.os.Parcelable;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.beardedhen.androidbootstrap.BootstrapButton;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,12 +19,10 @@ import example.com.powerinterview.components.InterviewComponent;
 import example.com.powerinterview.core.PowerInterviewApp;
 import example.com.powerinterview.exceptions.FactoryException;
 import example.com.powerinterview.interfaces.ICustomizableWidget;
-import example.com.powerinterview.interfaces.IPIWidgetsFactory;
-import example.com.powerinterview.interfaces.IWidget;
+import example.com.powerinterview.interfaces.Widget;
 import example.com.powerinterview.interfaces.IWidgetsProvider;
 import example.com.powerinterview.model.Question;
-import example.com.powerinterview.model.Widget;
-import example.com.powerinterview.ui.IOSStyledButton;
+import example.com.powerinterview.model.WidgetEntity;
 
 /**
  * Created by Игорь on 01.04.2017.
@@ -56,7 +50,7 @@ public class EditQuestionActivity extends Activity {
 
 
     private List<ICustomizableWidget> customizableWidgets;
-    private IWidget[] widgets;
+    private Widget[] widgets;
 
 
 
@@ -88,12 +82,12 @@ public class EditQuestionActivity extends Activity {
     private void initWidgets() {
 
         if (question != null) {
-            if(question.getWidgets() != null) {
-                for (Widget widget : question.getWidgets()) {
+            if(question.getWidgetEntities() != null) {
+                for (WidgetEntity widgetEntity : question.getWidgetEntities()) {
                     try {
-                        ICustomizableWidget customizableWidget = widgetsProvider.getEditableSpecificWidget(widget, EditQuestionActivity.this);
+                        ICustomizableWidget customizableWidget = widgetsProvider.getEditableSpecificWidget(widgetEntity, EditQuestionActivity.this);
                         customizableWidgets.add(customizableWidget);
-                        questionView.addView(((IWidget) customizableWidget).getView());
+                        questionView.addView(((Widget) customizableWidget).getView());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -107,7 +101,7 @@ public class EditQuestionActivity extends Activity {
                 try {
                     ICustomizableWidget customizableWidget = widgetsProvider.getEditableSpecificWidget(widgets[(int) v.getTag()], EditQuestionActivity.this);
                     customizableWidgets.add(customizableWidget);
-                    questionView.addView(((IWidget) customizableWidget).getView());
+                    questionView.addView(((Widget) customizableWidget).getView());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -118,7 +112,7 @@ public class EditQuestionActivity extends Activity {
         try {
             widgets = widgetsProvider.getWidgets(EditQuestionActivity.this);
             int i = 0;
-            for (IWidget widget: widgets) {
+            for (Widget widget: widgets) {
                 View view = widget.getView();
                 view.setTag(i);
                 view.setOnClickListener(createWidget);
@@ -139,13 +133,13 @@ public class EditQuestionActivity extends Activity {
 
     @OnClick(R.id.doneButton)
     public void onDone(){
-        List<Widget> widgets = new ArrayList<>();
+        List<WidgetEntity> widgetEntities = new ArrayList<>();
 
         for (ICustomizableWidget widget: customizableWidgets) {
-            widgets.add(widget.getWidget());
+            widgetEntities.add(widget.getWidget());
         }
 
-        question.setWidgets(widgets);
+        question.setWidgetEntities(widgetEntities);
         Intent intent = new Intent();
         intent.putExtra("question", (Parcelable) question);
         setResult(RESULT_OK, intent);

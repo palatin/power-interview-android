@@ -4,10 +4,9 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import example.com.powerinterview.factories.InterviewModule;
-import example.com.powerinterview.activities.EditQuestionActivity;
-import example.com.powerinterview.factories.PIWidgetsFactory;
 import example.com.powerinterview.interfaces.IPIWidgetsFactory;
 import example.com.powerinterview.interfaces.IWidgetsProvider;
+import example.com.powerinterview.managers.InterviewsTemplatesManager;
 import example.com.powerinterview.network.InterviewClient;
 
 /**
@@ -23,6 +22,8 @@ public interface InterviewComponent {
     IPIWidgetsFactory getWidgetsFactory();
 
     InterviewClient getInterviewClient();
+
+    InterviewsTemplatesManager getInterviewManager();
 
 
 }

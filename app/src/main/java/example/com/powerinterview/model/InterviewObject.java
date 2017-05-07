@@ -11,6 +11,7 @@ import java.io.Serializable;
 
 public abstract class InterviewObject implements Parcelable, Serializable {
 
+    private static final long serialVersionUID = -8961472213104074291L;
     private int id;
 
 

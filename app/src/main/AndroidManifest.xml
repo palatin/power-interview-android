@@ -16,7 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
-
         <meta-data
             android:name="DATABASE"
             android:value="PowerInterview.db" />
@@ -30,13 +29,11 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="example.com.powerinterview.model" />
 
-        <activity android:name=".activities.LoginActivity">
-
-        </activity>
+        <activity android:name=".activities.LoginActivity" />
         <activity
             android:name=".activities.ConstructorActivity"
             android:label="@string/title_activity_constructor"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.EditQuestionActivity" />
         <activity android:name=".activities.HomeActivity" />
         <activity android:name=".activities.LaunchActivity">
@@ -46,6 +43,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.InterviewPickerActivity" />
+        <activity android:name=".activities.InterviewActivity"></activity>
     </application>
 
 </manifest>

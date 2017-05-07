@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import example.com.powerinterview.managers.InterviewsTemplatesManager;
 import example.com.powerinterview.widgets.ConstructorWidgetsProvider;
 import example.com.powerinterview.interfaces.IPIWidgetsFactory;
 import example.com.powerinterview.interfaces.IWidgetsProvider;
@@ -32,6 +33,12 @@ public class InterviewModule {
     @Singleton
     InterviewClient getInterviewClient() {
         return new InterviewClient();
+    }
+
+    @Provides
+    @Singleton
+    InterviewsTemplatesManager getInterviewManager() {
+        return new InterviewsTemplatesManager();
     }
 
 

@@ -10,7 +10,8 @@ import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapSize;
 
 import java.util.List;
 
-import example.com.powerinterview.interfaces.IWidget;
+import example.com.powerinterview.interfaces.ActionListener;
+import example.com.powerinterview.interfaces.Widget;
 import example.com.powerinterview.model.Action;
 import example.com.powerinterview.model.Attribute;
 
@@ -18,12 +19,13 @@ import example.com.powerinterview.model.Attribute;
  * Created by Игорь on 04.04.2017.
  */
 
-public class PIBootstrapButton extends BaseWidget implements IWidget {
+public class PIBootstrapButton extends BaseWidget implements Widget, View.OnClickListener {
 
 
 
 
     protected BootstrapButton view;
+    private ActionListener listener;
 
     public PIBootstrapButton(List<Attribute> attributes, List<Action> actions, Context context) {
         super(attributes, actions);
@@ -38,6 +40,7 @@ public class PIBootstrapButton extends BaseWidget implements IWidget {
         view.setBootstrapBrand(DefaultBootstrapBrand.PRIMARY);
         view.setText("Text");
         view.setBootstrapSize(DefaultBootstrapSize.LG);
+        view.setOnClickListener(this);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -78,4 +81,10 @@ public class PIBootstrapButton extends BaseWidget implements IWidget {
     }
 
 
+
+
+    @Override
+    public void onClick(View v) {
+        produceActions();
+    }
 }

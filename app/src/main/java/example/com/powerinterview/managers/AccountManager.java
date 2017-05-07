@@ -51,7 +51,7 @@ public class AccountManager {
     }
 
     public User getAccount(Context context) throws Exception {
-        User user = SugarRecord.first(User.class);;
+        User user = SugarRecord.first(User.class);
         if(user != null) {
             user.setPassword(Encrypt.decryptByAES(user.getPassword(), getEncryptKey(context)));
             storeUser(user);
