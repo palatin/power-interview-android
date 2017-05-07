@@ -11,9 +11,10 @@ import java.util.List;
  * Created by Игорь on 06.04.2017.
  */
 
-public class Widget implements Parcelable, Serializable {
+public class WidgetEntity implements Parcelable, Serializable {
 
 
+    private static final long serialVersionUID = 8180624971897472123L;
     private String className;
 
     private List<Attribute> attributes;
@@ -37,7 +38,7 @@ public class Widget implements Parcelable, Serializable {
     }
 
 
-    public Widget() {
+    public WidgetEntity() {
     }
 
 
@@ -53,7 +54,7 @@ public class Widget implements Parcelable, Serializable {
         dest.writeList(this.actions);
     }
 
-    protected Widget(Parcel in) {
+    protected WidgetEntity(Parcel in) {
         this.className = in.readString();
         this.attributes = new ArrayList<Attribute>();
         this.actions = new ArrayList<Action>();
@@ -61,15 +62,15 @@ public class Widget implements Parcelable, Serializable {
         in.readList(this.actions, Action.class.getClassLoader());
     }
 
-    public static final Creator<Widget> CREATOR = new Creator<Widget>() {
+    public static final Creator<WidgetEntity> CREATOR = new Creator<WidgetEntity>() {
         @Override
-        public Widget createFromParcel(Parcel source) {
-            return new Widget(source);
+        public WidgetEntity createFromParcel(Parcel source) {
+            return new WidgetEntity(source);
         }
 
         @Override
-        public Widget[] newArray(int size) {
-            return new Widget[size];
+        public WidgetEntity[] newArray(int size) {
+            return new WidgetEntity[size];
         }
     };
 

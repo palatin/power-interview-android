@@ -6,17 +6,20 @@ import com.orm.SugarRecord;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
+import example.com.powerinterview.model.Interview;
 import example.com.powerinterview.model.InterviewTemplate;
 
 /**
  * Created by Игорь on 03.05.2017.
  */
 
-public class InterviewManager {
+public class InterviewsTemplatesManager {
 
 
 
@@ -52,6 +55,17 @@ public class InterviewManager {
 
     private void removeTemplate(long id) {
         SugarRecord.delete(getInterviewTemplateById(id));
+    }
+
+    public Interview loadInterviewByFile(File file) throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream(file);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        Interview interview = (Interview) ois.readObject();
+        if(interview  == null)
+            throw new NullPointerException("Can't read template");
+
+        return interview;
+
     }
 
 

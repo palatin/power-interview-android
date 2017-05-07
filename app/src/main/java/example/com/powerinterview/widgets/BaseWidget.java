@@ -1,11 +1,9 @@
 package example.com.powerinterview.widgets;
 
-import android.view.View;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import example.com.powerinterview.interfaces.IWidget;
+import example.com.powerinterview.interfaces.Widget;
 import example.com.powerinterview.model.Action;
 import example.com.powerinterview.model.Attribute;
 
@@ -13,7 +11,7 @@ import example.com.powerinterview.model.Attribute;
  * Created by Игорь on 04.05.2017.
  */
 
-abstract class BaseWidget implements IWidget {
+abstract class BaseWidget implements Widget {
 
 
     protected List<Attribute> attributes;

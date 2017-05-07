@@ -96,14 +96,6 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
 
     private void initInterview() {
         interviewObjects = new ArrayList<>();
-        /*Question question = new Question();
-        question.setId(1);
-        List<Widget> widgets = new ArrayList<>();
-        Widget widget = new Widget();
-        widget.setClassName(PIBootstrapButton.class.getName());
-        widgets.add(widget);
-        question.setWidgets(widgets);
-        interviewObjects.add(question);*/
     }
 
     @Override
@@ -208,7 +200,7 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
                         Interview interview = new Interview();
                         interview.setName(interviewName.getText().toString());
                         interview.setDescription(description.getText().toString());
-                        interview.setPassword(password.toString());
+                        interview.setPassword(password.getText().toString());
                         interview.setInterviewObjects(interviewObjects);
                         uploadInterview(interview);
                     }

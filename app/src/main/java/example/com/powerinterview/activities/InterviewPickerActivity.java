@@ -29,7 +29,7 @@ import example.com.powerinterview.exceptions.ConvertException;
 import example.com.powerinterview.exceptions.EncryptionException;
 import example.com.powerinterview.interfaces.InterviewPick;
 import example.com.powerinterview.managers.AccountManager;
-import example.com.powerinterview.managers.InterviewManager;
+import example.com.powerinterview.managers.InterviewsTemplatesManager;
 import example.com.powerinterview.model.InterviewTemplate;
 import example.com.powerinterview.network.InterviewClient;
 import example.com.powerinterview.ui.CustomToast;
@@ -43,7 +43,7 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
     private List<InterviewTemplate> interviewTemplates;
     private InterviewsAdapter adapter;
     private Unbinder unbinder;
-    private InterviewManager interviewManager;
+    private InterviewsTemplatesManager interviewsTemplatesManager;
 
     @BindView(R.id.interviewsRecyclerView)
     RecyclerView recyclerView;
@@ -53,7 +53,7 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_interview_picker);
         client = ((PowerInterviewApp) getApplication()).getInterviewComponent().getInterviewClient();
-        interviewManager = ((PowerInterviewApp) getApplication()).getInterviewComponent().getInterviewManager();
+        interviewsTemplatesManager = ((PowerInterviewApp) getApplication()).getInterviewComponent().getInterviewManager();
         accountManager = ((PowerInterviewApp) getApplication()).getAuthComponent().accountManager();
 
         unbinder = ButterKnife.bind(this);
@@ -118,7 +118,7 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
     public void onInterviewPicked(InterviewTemplate interviewTemplate) {
 
         try {
-            File file = interviewManager.getFileTemplateById(interviewTemplate.getId(), getApplicationContext());
+            File file = interviewsTemplatesManager.getFileTemplateById(interviewTemplate.getId(), getApplicationContext());
             Intent intent = new Intent(InterviewPickerActivity.this, InterviewActivity.class);
             intent.putExtra("template", file);
             startActivity(intent);
@@ -159,8 +159,8 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
                             }
                             else if(header.getValue().equals("application/octet-stream")) {
                                 try {
-                                    interviewManager.storeInterviewTemplate(interviewTemplate, getApplicationContext(), responseBody);
-                                    File file = interviewManager.getFileTemplateById(interviewTemplate.getId(), getApplicationContext());
+                                    interviewsTemplatesManager.storeInterviewTemplate(interviewTemplate, getApplicationContext(), responseBody);
+                                    File file = interviewsTemplatesManager.getFileTemplateById(interviewTemplate.getId(), getApplicationContext());
                                     Intent intent = new Intent(InterviewPickerActivity.this, InterviewActivity.class);
                                     intent.putExtra("template", file);
                                     startActivity(intent);

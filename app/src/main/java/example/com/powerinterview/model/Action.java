@@ -12,6 +12,7 @@ import java.io.Serializable;
 public class Action implements Parcelable, Serializable {
 
 
+    private static final long serialVersionUID = -5303257196515386261L;
     private String key;
 
     private String value;

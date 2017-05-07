@@ -9,7 +9,7 @@ import java.util.List;
 import example.com.powerinterview.interfaces.ICustomizableWidget;
 import example.com.powerinterview.model.Action;
 import example.com.powerinterview.model.Attribute;
-import example.com.powerinterview.model.Widget;
+import example.com.powerinterview.model.WidgetEntity;
 
 /**
  * Created by Игорь on 04.05.2017.
@@ -49,12 +49,12 @@ public class PISpinnerEditable extends PISpinner implements ICustomizableWidget 
     }
 
     @Override
-    public Widget getWidget() {
-        Widget widget = new Widget();
-        widget.setClassName(getClass().getSuperclass().getName());
-        widget.setAttributes(getAttributes());
-        widget.setActions(actions);
-        return widget;
+    public WidgetEntity getWidget() {
+        WidgetEntity widgetEntity = new WidgetEntity();
+        widgetEntity.setClassName(getClass().getSuperclass().getName());
+        widgetEntity.setAttributes(getAttributes());
+        widgetEntity.setActions(actions);
+        return widgetEntity;
     }
 
 }

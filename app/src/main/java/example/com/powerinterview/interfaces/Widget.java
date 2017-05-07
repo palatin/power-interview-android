@@ -13,7 +13,7 @@ import example.com.powerinterview.model.Attribute;
  * Created by Игорь on 05.04.2017.
  */
 
-public interface IWidget {
+public interface Widget {
 
     void setAttributes(List<Attribute> attributes);
 

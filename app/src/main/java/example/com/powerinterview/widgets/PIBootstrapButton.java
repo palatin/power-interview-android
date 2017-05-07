@@ -10,7 +10,7 @@ import com.beardedhen.androidbootstrap.api.defaults.DefaultBootstrapSize;
 
 import java.util.List;
 
-import example.com.powerinterview.interfaces.IWidget;
+import example.com.powerinterview.interfaces.Widget;
 import example.com.powerinterview.model.Action;
 import example.com.powerinterview.model.Attribute;
 
@@ -18,7 +18,7 @@ import example.com.powerinterview.model.Attribute;
  * Created by Игорь on 04.04.2017.
  */
 
-public class PIBootstrapButton extends BaseWidget implements IWidget {
+public class PIBootstrapButton extends BaseWidget implements Widget {
 
 
 
