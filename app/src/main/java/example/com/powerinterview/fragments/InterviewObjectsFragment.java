@@ -7,6 +7,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -51,6 +54,7 @@ public class InterviewObjectsFragment extends Fragment {
 
 
 
+
     @BindView(R.id.questionsRecyclerView)
     RecyclerView recyclerView;
 
@@ -63,7 +67,7 @@ public class InterviewObjectsFragment extends Fragment {
 
         unbinder = ButterKnife.bind(this, view);
 
-
+        setHasOptionsMenu(true);
 
         try {
             interviewObjects = getArguments().getParcelableArrayList("interview");
@@ -82,16 +86,35 @@ public class InterviewObjectsFragment extends Fragment {
         return view;
     }
 
-    @OnClick(R.id.addQuestionButton)
-    public void addQuestion() {
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.constructor_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.add_question:
+                addQuestion();
+                break;
+            case R.id.add_condition:
+                addCondition();
+                break;
+        }
+        return false;
+    }
+
+    private void addQuestion() {
         Question question = new Question();
         question.setId(interviewObjects.size());
         interviewObjects.add(question);
         adapter.notifyItemInserted(interviewObjects.size() - 1);
     }
 
-    @OnClick(R.id.conditionButton)
-    public void addCondition() {
+
+    private void addCondition() {
         ConditionBlock conditionBlock = new ConditionBlock();
         conditionBlock.setId(interviewObjects.size());
         interviewObjects.add(conditionBlock);
