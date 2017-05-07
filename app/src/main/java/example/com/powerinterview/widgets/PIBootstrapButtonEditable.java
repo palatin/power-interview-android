@@ -7,16 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import example.com.powerinterview.interfaces.ICustomizableWidget;
-import example.com.powerinterview.interfaces.IWidget;
+import example.com.powerinterview.interfaces.Widget;
 import example.com.powerinterview.model.Action;
 import example.com.powerinterview.model.Attribute;
-import example.com.powerinterview.model.Widget;
+import example.com.powerinterview.model.WidgetEntity;
 
 /**
  * Created by Игорь on 04.05.2017.
  */
 
-public class PIBootstrapButtonEditable extends PIBootstrapButton implements ICustomizableWidget, IWidget {
+public class PIBootstrapButtonEditable extends PIBootstrapButton implements ICustomizableWidget, Widget {
 
     public PIBootstrapButtonEditable(List<Attribute> attributes, List<Action> actions, Context context) {
         super(attributes, actions, context);
@@ -51,12 +51,12 @@ public class PIBootstrapButtonEditable extends PIBootstrapButton implements ICus
     }
 
     @Override
-    public Widget getWidget() {
-        Widget widget = new Widget();
-        widget.setClassName(getClass().getSuperclass().getName());
-        widget.setAttributes(getAttributes());
-        widget.setActions(getActions());
-        return widget;
+    public WidgetEntity getWidget() {
+        WidgetEntity widgetEntity = new WidgetEntity();
+        widgetEntity.setClassName(getClass().getSuperclass().getName());
+        widgetEntity.setAttributes(getAttributes());
+        widgetEntity.setActions(getActions());
+        return widgetEntity;
     }
 
 

@@ -1,11 +1,12 @@
 package example.com.powerinterview.widgets;
 
-import android.view.View;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import example.com.powerinterview.interfaces.IWidget;
+import example.com.powerinterview.interfaces.ActionListener;
+import example.com.powerinterview.interfaces.Command;
+import example.com.powerinterview.interfaces.InterviewController;
+import example.com.powerinterview.interfaces.Widget;
 import example.com.powerinterview.model.Action;
 import example.com.powerinterview.model.Attribute;
 
@@ -13,11 +14,12 @@ import example.com.powerinterview.model.Attribute;
  * Created by Игорь on 04.05.2017.
  */
 
-abstract class BaseWidget implements IWidget {
+abstract class BaseWidget implements Widget {
 
 
     protected List<Attribute> attributes;
     protected List<Action> actions;
+    protected ActionListener listener;
 
     public BaseWidget(List<Attribute> attributes, List<Action> actions) {
         this.attributes = attributes != null ? attributes : new ArrayList<Attribute>();
@@ -59,5 +61,26 @@ abstract class BaseWidget implements IWidget {
         return actions;
     }
 
+    @Override
+    public void setActionListener(ActionListener listener) {
+        this.listener = listener;
+    }
 
+
+    protected void produceActions() {
+        List<Command> commands = new ArrayList<>();
+
+        for (final Action action: actions) {
+            if(action.getKey().equals("go_to")) {
+                commands.add(new Command() {
+                    @Override
+                    public void execute(InterviewController controller) {
+                        controller.moveTo(Integer.parseInt(action.getValue()));
+                    }
+                });
+            }
+        }
+        if(listener != null)
+            listener.notify(commands);
+    }
 }

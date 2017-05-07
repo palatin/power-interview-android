@@ -13,6 +13,8 @@ import java.util.List;
 public class ConditionBlock extends InterviewObject implements Parcelable {
 
 
+    private static final long serialVersionUID = -2221309268233065596L;
+
     @Override
     public String getTitle() {
         return "Condition block, id -  " + getId();

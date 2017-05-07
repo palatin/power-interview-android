@@ -21,6 +21,7 @@ import javax.xml.transform.Source;
 
 public class Interview implements Serializable, Parcelable{
 
+    private static final long serialVersionUID = -2608887871386451609L;
     private String name;
     private String description;
     private String password;
