@@ -7,6 +7,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -23,10 +25,12 @@ import example.com.powerinterview.model.Condition;
 public class ConditionsAdapter extends RecyclerView.Adapter<ConditionsAdapter.ViewHolder> {
 
     private List<Condition> conditions;
+    private ArrayAdapter<String> autoCompleteVariableName;
 
 
-    public ConditionsAdapter(List<Condition> conditions) {
+    public ConditionsAdapter(List<Condition> conditions, String[] variableNames, Context context) {
         this.conditions = conditions;
+        autoCompleteVariableName = new ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, variableNames);
     }
 
     @Override
@@ -37,6 +41,8 @@ public class ConditionsAdapter extends RecyclerView.Adapter<ConditionsAdapter.Vi
         // Inflate the custom layout
         View conditionView = inflater.inflate(R.layout.condition_list_item, parent, false);
         final ViewHolder holder = new ViewHolder(conditionView);
+
+        holder.condition.setAdapter(autoCompleteVariableName);
 
 
         holder.condition.addTextChangedListener(new TextWatcher() {
@@ -101,14 +107,14 @@ public class ConditionsAdapter extends RecyclerView.Adapter<ConditionsAdapter.Vi
     static class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        EditText condition;
+        AutoCompleteTextView condition;
         EditText goTo;
 
         ViewHolder(View itemView) {
 
             super(itemView);
 
-            condition = (EditText) itemView.findViewById(R.id.condition);
+            condition = (AutoCompleteTextView) itemView.findViewById(R.id.condition);
             goTo = (EditText) itemView.findViewById(R.id.goTo);
         }
     }

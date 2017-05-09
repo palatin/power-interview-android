@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,8 +28,10 @@ import example.com.powerinterview.R;
 import example.com.powerinterview.adapters.InterviewObjectsAdapter;
 import example.com.powerinterview.interfaces.IEditInterviewObjectListener;
 import example.com.powerinterview.model.ConditionBlock;
+import example.com.powerinterview.model.Interview;
 import example.com.powerinterview.model.InterviewObject;
 import example.com.powerinterview.model.Question;
+import example.com.powerinterview.model.Variable;
 
 
 /**
@@ -40,14 +43,14 @@ public class InterviewObjectsFragment extends Fragment {
 
     private Unbinder unbinder;
     private InterviewObjectsAdapter adapter;
-    private ArrayList<InterviewObject> interviewObjects;
+    private Interview interview;
 
 
 
-    public static InterviewObjectsFragment newInstance(ArrayList<InterviewObject> interviewObjects){
+    public static InterviewObjectsFragment newInstance(Interview interview){
         InterviewObjectsFragment interviewObjectsFragment = new InterviewObjectsFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("interview", interviewObjects);
+        bundle.putParcelable("interview", interview);
         interviewObjectsFragment.setArguments(bundle);
         return interviewObjectsFragment;
     }
@@ -70,14 +73,14 @@ public class InterviewObjectsFragment extends Fragment {
         setHasOptionsMenu(true);
 
         try {
-            interviewObjects = getArguments().getParcelableArrayList("interview");
+            interview = getArguments().getParcelable("interview");
         }
         catch (NullPointerException ex){
             ex.printStackTrace();
         }
 
-        if(interviewObjects != null && getActivity() instanceof IEditInterviewObjectListener) {
-            adapter = new InterviewObjectsAdapter(interviewObjects, (IEditInterviewObjectListener) getActivity());
+        if(interview != null && getActivity() instanceof IEditInterviewObjectListener) {
+            adapter = new InterviewObjectsAdapter(interview.getInterviewObjects(), (IEditInterviewObjectListener) getActivity());
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -102,11 +105,15 @@ public class InterviewObjectsFragment extends Fragment {
             case R.id.add_condition:
                 addCondition();
                 break;
+            case R.id.manage_variables:
+                manageVariables();
+                break;
         }
         return false;
     }
 
     private void addQuestion() {
+        List<InterviewObject> interviewObjects = interview.getInterviewObjects();
         Question question = new Question();
         question.setId(interviewObjects.size());
         interviewObjects.add(question);
@@ -115,11 +122,17 @@ public class InterviewObjectsFragment extends Fragment {
 
 
     private void addCondition() {
+        List<InterviewObject> interviewObjects = interview.getInterviewObjects();
         ConditionBlock conditionBlock = new ConditionBlock();
         conditionBlock.setId(interviewObjects.size());
         interviewObjects.add(conditionBlock);
         adapter.notifyItemInserted(interviewObjects.size() - 1);
     }
+
+    private void manageVariables() {
+        ((IEditInterviewObjectListener) getActivity()).manageVariables();
+    }
+
 
     @Override
     public void onDestroy() {

@@ -77,9 +77,11 @@ public class ConditionDialog extends DialogFragment {
 
 
         conditions = new ArrayList<>();
+        String[] variables = null;
 
         try {
             condition = getArguments().getParcelable("condition");
+            variables = (String[]) getArguments().getSerializable("variables");
         } catch (NullPointerException ex) {
             ex.printStackTrace();
         }
@@ -89,7 +91,7 @@ public class ConditionDialog extends DialogFragment {
         if(condition.getConditions() != null)
             conditions.addAll(condition.getConditions());
 
-        final ConditionsAdapter adapter = new ConditionsAdapter(conditions);
+        final ConditionsAdapter adapter = new ConditionsAdapter(conditions,variables, getContext());
 
         conditionRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 

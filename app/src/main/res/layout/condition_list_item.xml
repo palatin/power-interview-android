@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_list_separator">
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/condition"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
