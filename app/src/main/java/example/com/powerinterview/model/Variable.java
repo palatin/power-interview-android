@@ -41,4 +41,13 @@ public class Variable implements Serializable {
     public void setType(Type type) {
         this.type = type;
     }
+
+    public Object castObjectToSameType(Object object) {
+        Type type = getType();
+        if (type.equals(Type.Number)) {
+            return Float.parseFloat(object.toString());
+        }
+
+        return object;
+    }
 }

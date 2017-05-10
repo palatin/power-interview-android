@@ -18,13 +18,12 @@ public class Condition implements Parcelable, Serializable {
     private String goTo;
 
 
-
     public String getCondition() {
         return condition;
     }
 
-    public void setCondition(String condtition) {
-        this.condition = condtition;
+    public void setCondition(String condition) {
+        this.condition = condition;
     }
 
     @Override
