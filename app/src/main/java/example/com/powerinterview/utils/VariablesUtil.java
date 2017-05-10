@@ -18,6 +18,14 @@ public class VariablesUtil {
         Object object = variable.getValue();
         if(isFloat(object)) {
             variable.setValue(Float.parseFloat(object.toString()));
+            variable.setType(Variable.Type.Number);
+        }
+        else if(isBoolean(object)) {
+            variable.setValue(Boolean.parseBoolean(object.toString()));
+            variable.setType(Variable.Type.Boolean);
+        }
+        else {
+            variable.setType(Variable.Type.String);
         }
 
         return variable;
@@ -34,4 +42,11 @@ public class VariablesUtil {
         return !sc.hasNext();
 
     }
+
+    private static boolean isBoolean(Object object) {
+
+        return object.toString().toLowerCase().equals("true") || object.toString().toLowerCase().equals("false");
+
+    }
+
 }

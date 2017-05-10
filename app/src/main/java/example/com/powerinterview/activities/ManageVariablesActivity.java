@@ -89,6 +89,7 @@ public class ManageVariablesActivity extends BaseWorkerActivity implements EditV
 
 
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -107,7 +108,7 @@ public class ManageVariablesActivity extends BaseWorkerActivity implements EditV
             @Override
             public void editVariable(String name, String value) {
 
-                //TODO cast to real variable type
+
                 variable.setValue(value);
 
                 if(!oldName.equals(name) && checkVariableName(name)) {
@@ -194,7 +195,7 @@ public class ManageVariablesActivity extends BaseWorkerActivity implements EditV
             public void editVariable(String name, String value) {
                 if(!checkVariableName(name))
                     return;
-                //TODO cast to real variable type
+
                 variable.setValue(value);
                 variables.put(name, VariablesUtil.parseVariableToExpectType(variable));
 

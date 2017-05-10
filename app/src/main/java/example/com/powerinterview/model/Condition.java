@@ -65,4 +65,22 @@ public class Condition implements Parcelable, Serializable {
     public void setGoTo(String goTo) {
         this.goTo = goTo;
     }
+
+    public String getLeftSide() {
+        return condition.split("::")[0];
+    }
+
+    public String getOperand() {
+        return condition.split("::")[1];
+    }
+
+    public String getRightSide() {
+        return condition.split("::")[2];
+    }
+
+
+    @Override
+    public String toString() {
+        return getLeftSide() + " " + getOperand() + " " + getRightSide();
+    }
 }

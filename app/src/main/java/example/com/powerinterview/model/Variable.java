@@ -10,7 +10,7 @@ public class Variable implements Serializable {
 
 
 
-    public enum Type { String, Integer };
+    public enum Type { String, Number, Boolean };
 
     private static final long serialVersionUID = 7504125690550250633L;
     private Object value;

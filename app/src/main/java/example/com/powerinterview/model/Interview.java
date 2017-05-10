@@ -16,6 +16,8 @@ import java.util.List;
 
 import javax.xml.transform.Source;
 
+import example.com.powerinterview.ui.CustomToast;
+
 /**
  * Created by Игорь on 18.04.2017.
  */
@@ -120,5 +122,25 @@ public class Interview implements Serializable, Parcelable{
 
     public void setVariables(HashMap<String, Variable> variables) {
         this.variables = variables;
+        checkConditionsOnVariablesExists();
+    }
+
+    //check if some condition use variable that is no longer exist
+    private void checkConditionsOnVariablesExists() {
+
+        for (InterviewObject object: interviewObjects) {
+
+            if(object instanceof ConditionBlock) {
+                List<Condition> conditions = ((ConditionBlock) object).getConditions();
+                for (Condition condition: conditions) {
+                    if(!variables.containsKey(condition.getLeftSide())) {
+                        conditions.remove(condition);
+                    }
+                }
+            }
+
+        }
+
+
     }
 }

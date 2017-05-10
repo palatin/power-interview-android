@@ -53,7 +53,7 @@ import example.com.powerinterview.network.InterviewClient;
 import example.com.powerinterview.ui.CustomToast;
 import example.com.powerinterview.utils.Converter;
 
-public class ConstructorActivity extends BaseWorkerActivity implements IEditInterviewObjectListener, ConditionDialog.OnCompleteCondition {
+public class ConstructorActivity extends BaseWorkerActivity implements IEditInterviewObjectListener {
 
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -117,18 +117,11 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
             Bundle bundle = new Bundle();
             bundle.putParcelable("condition", object);
             HashMap<String, Variable> variableHashMap = interview.getVariables();
-            String[] variables = new String[variableHashMap.size()];
-            Iterator it = variableHashMap.entrySet().iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry)it.next();
-                variables[i] = ((Variable) pair.getValue()).getValue().toString();
-                i++;
-            }
-            bundle.putSerializable("variables", variables);
-            ConditionDialog dialog = new ConditionDialog();
-            dialog.setArguments(bundle);
-            dialog.show(getSupportFragmentManager(), "condition_dialog");
+            bundle.putSerializable("variables", variableHashMap);
+            Intent intent = new Intent(this, EditConditionActivity.class);
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 2);
+
         }
     }
 
@@ -136,7 +129,7 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
     public void manageVariables() {
         Intent intent = new Intent(this, ManageVariablesActivity.class);
         intent.putExtra("variables", interview.getVariables());
-        startActivityForResult(intent, 2);
+        startActivityForResult(intent, 3);
     }
 
     @Override
@@ -148,6 +141,10 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
                     interview.getInterviewObjects().set(interview.getInterviewObjects().indexOf(question), question);
                 break;
                 case 2:
+                    ConditionBlock conditionBlock = data.getParcelableExtra("condition");
+                    interview.getInterviewObjects().set(interview.getInterviewObjects().indexOf(conditionBlock), conditionBlock);
+                    break;
+                case 3:
                     HashMap<String, Variable> variables = (HashMap<String, Variable>) data.getSerializableExtra("variables");
                     interview.setVariables(variables);
                     break;
@@ -155,10 +152,6 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
         }
     }
 
-    @Override
-    public void onCompleteCondition(ConditionBlock conditionBlock) {
-        interview.getInterviewObjects().set(interview.getInterviewObjects().indexOf(conditionBlock), conditionBlock);
-    }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
