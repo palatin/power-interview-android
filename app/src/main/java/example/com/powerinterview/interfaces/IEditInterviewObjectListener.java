@@ -10,5 +10,6 @@ public interface IEditInterviewObjectListener {
 
     void editObject(InterviewObject object);
 
+    void manageVariables();
 
 }

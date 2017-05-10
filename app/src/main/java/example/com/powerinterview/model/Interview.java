@@ -11,9 +11,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.transform.Source;
+
+import example.com.powerinterview.ui.CustomToast;
 
 /**
  * Created by Игорь on 18.04.2017.
@@ -21,12 +24,15 @@ import javax.xml.transform.Source;
 
 public class Interview implements Serializable, Parcelable{
 
-    private static final long serialVersionUID = -2608887871386451609L;
+
+    private static final long serialVersionUID = 5964231270107791129L;
     private String name;
     private String description;
     private String password;
 
     private List<InterviewObject> interviewObjects;
+
+    private HashMap<String, Variable> variables;
 
     public List<InterviewObject> getInterviewObjects() {
         return interviewObjects;
@@ -108,5 +114,33 @@ public class Interview implements Serializable, Parcelable{
 
         InputStream is = new ByteArrayInputStream(baos.toByteArray());
         return is;
+    }
+
+    public HashMap<String, Variable> getVariables() {
+        return variables;
+    }
+
+    public void setVariables(HashMap<String, Variable> variables) {
+        this.variables = variables;
+        checkConditionsOnVariablesExists();
+    }
+
+    //check if some condition use variable that is no longer exist
+    private void checkConditionsOnVariablesExists() {
+
+        for (InterviewObject object: interviewObjects) {
+
+            if(object instanceof ConditionBlock) {
+                List<Condition> conditions = ((ConditionBlock) object).getConditions();
+                for (Condition condition: conditions) {
+                    if(!variables.containsKey(condition.getLeftSide())) {
+                        conditions.remove(condition);
+                    }
+                }
+            }
+
+        }
+
+
     }
 }
