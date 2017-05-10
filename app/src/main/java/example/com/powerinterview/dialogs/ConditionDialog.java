@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -42,6 +43,9 @@ public class ConditionDialog extends DialogFragment {
 
     @BindView(R.id.leftSideCondition)
     AutoCompleteTextView leftSideCondition;
+
+    @BindView(R.id.gotoEditText)
+    EditText gotoEditText;
 
     @BindView(R.id.rightSideCondition)
     AutoCompleteTextView rightSideCondition;
@@ -258,6 +262,12 @@ public class ConditionDialog extends DialogFragment {
 
     @OnClick(R.id.doneButton)
     public void onDone() {
+
+        if(gotoEditText.getText().toString().isEmpty()) {
+            gotoEditText.setError("Field can't be empty");
+            return;
+        }
+
         if(spinnerArrayAdapter.getCount() == 0) {
             new CustomToast(getContext(), "Please verify condition, something wrong", Toast.LENGTH_SHORT, CustomToast.ToastType.TOAST_ALERT).show();
             return;
@@ -273,6 +283,7 @@ public class ConditionDialog extends DialogFragment {
             listener.onConditionReady(condition, updatableIndex);
         else
             listener.onConditionReady(condition);
+        condition.setGoTo(gotoEditText.getText().toString());
         dismiss();
     }
 
