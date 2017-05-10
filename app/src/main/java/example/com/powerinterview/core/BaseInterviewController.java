@@ -8,9 +8,11 @@ import example.com.powerinterview.factories.PIWidgetsFactory;
 import example.com.powerinterview.interfaces.IPIWidgetsFactory;
 import example.com.powerinterview.interfaces.InterviewController;
 import example.com.powerinterview.interfaces.InterviewProvider;
+import example.com.powerinterview.model.ConditionBlock;
 import example.com.powerinterview.model.Interview;
 import example.com.powerinterview.model.InterviewObject;
 import example.com.powerinterview.model.Question;
+import example.com.powerinterview.model.Variable;
 
 /**
  * Created by Игорь on 06.05.2017.
@@ -23,6 +25,7 @@ public class BaseInterviewController implements InterviewController {
     private int currentId;
     private Context context;
     private QuestionController questionController;
+    private ConditionController conditionController;
     private IPIWidgetsFactory factory;
 
 
@@ -31,6 +34,7 @@ public class BaseInterviewController implements InterviewController {
         this.context = provider.getContext();
         this.factory = factory;
         questionController = new QuestionController(this, factory);
+        conditionController = new ConditionController(this);
     }
 
     public void initInterview(Interview interview) throws InterviewElementNotFoundException, FactoryException {
@@ -59,6 +63,9 @@ public class BaseInterviewController implements InterviewController {
         if(object instanceof Question) {
             provider.displayViews(questionController.parseQuestion((Question) object, context));
         }
+        else if(object instanceof ConditionBlock) {
+            conditionController.produceConditionBlock((ConditionBlock) object);
+        }
     }
 
     @Override
@@ -71,5 +78,15 @@ public class BaseInterviewController implements InterviewController {
         } catch (FactoryException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Variable getVariable(String key) {
+        return interview.getVariables().get(key);
+    }
+
+    @Override
+    public void setVariable(String key, Variable variable) {
+        interview.getVariables().put(key, variable);
     }
 }
