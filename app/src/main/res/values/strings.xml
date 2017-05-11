@@ -22,4 +22,5 @@
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
     <string name="exception">Some exception occurred</string>
+    <string name="activate_code">Activate code</string>
 </resources>

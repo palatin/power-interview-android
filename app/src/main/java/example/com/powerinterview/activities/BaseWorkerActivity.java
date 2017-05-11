@@ -52,10 +52,17 @@ public class BaseWorkerActivity extends AppCompatActivity {
             Log.d(tag, message);
     }
 
-    protected void displayResult(JSONObject obj) throws JSONException {
+    protected boolean displayResult(JSONObject obj) throws JSONException {
         CustomToast.ToastType toastType = obj.getString("type").equals("success") ? CustomToast.ToastType.TOAST_SUCCESS : CustomToast.ToastType.TOAST_ALERT;
-        String message = obj.getString("msg");
-        showToast(message, toastType);
+        try {
+            String message = obj.getString("msg");
+            showToast(message, toastType);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return obj.getBoolean("result");
     }
 
 }
