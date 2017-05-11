@@ -55,6 +55,7 @@ public class PIBootstrapButtonEditable extends PIBootstrapButton implements ICus
         actions.add(baseCustomizableDialog.createBaseCustomizableInfo("go_to", "Enter id on which the transition will be made (example: 2)",
                 index == -1 ? "" : currentActions.get(index).getValue()));
 
+
         Action bindAction = new Action();
         bindAction.setKey("bind");
         index = currentActions.indexOf(bindAction);

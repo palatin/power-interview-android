@@ -70,6 +70,11 @@ public class BaseInterviewController implements InterviewController {
 
     @Override
     public void moveTo(int id) {
+
+        if(id == -1) {
+            endInterview();
+            return;
+        }
         currentId = id;
         try {
             parseInterviewObjects();
@@ -80,13 +85,20 @@ public class BaseInterviewController implements InterviewController {
         }
     }
 
+    private void endInterview() {
+        provider.endInterview();
+    }
+
     @Override
     public Variable getVariable(String key) {
         return interview.getVariables().get(key);
     }
 
     @Override
-    public void setVariable(String key, Variable variable) {
+    public void setVariable(String key, Object value) {
+        Variable variable = interview.getVariables().get(key);
+        variable.castObjectToSameType(value);
+        variable.setValue(value);
         interview.getVariables().put(key, variable);
     }
 }
