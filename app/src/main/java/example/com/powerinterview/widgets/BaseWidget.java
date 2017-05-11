@@ -50,8 +50,14 @@ abstract class BaseWidget implements Widget {
             int index = this.actions.indexOf(action);
             if (index == -1)
                 this.actions.add(action);
-            else
+            else {
+                if(action.getValue().isEmpty()) {
+                    this.actions.remove(index);
+                    return;
+                }
+
                 this.actions.set(index, action);
+            }
         }
 
     }

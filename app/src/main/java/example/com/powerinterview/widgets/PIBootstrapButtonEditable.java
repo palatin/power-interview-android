@@ -18,6 +18,9 @@ import example.com.powerinterview.model.WidgetEntity;
 
 public class PIBootstrapButtonEditable extends PIBootstrapButton implements ICustomizableWidget, Widget {
 
+
+    private BaseCustomizableDialog baseCustomizableDialog = new BaseCustomizableDialog();
+
     public PIBootstrapButtonEditable(List<Attribute> attributes, List<Action> actions, Context context) {
         super(attributes, actions, context);
 
@@ -33,7 +36,6 @@ public class PIBootstrapButtonEditable extends PIBootstrapButton implements ICus
     @Override
     public void customize() {
 
-        BaseCustomizableDialog baseCustomizableDialog = new BaseCustomizableDialog();
 
         Context context = view.getContext();
 
@@ -43,10 +45,21 @@ public class PIBootstrapButtonEditable extends PIBootstrapButton implements ICus
         List<BaseCustomizableDialog.BaseCustomizableInfo> actions = new ArrayList<>();
 
 
+        List<Action> currentActions = getActions();
+        int index = -1;
 
+        attributes.add(baseCustomizableDialog.createBaseCustomizableInfo("text", "Type here button text", view.getText().toString()));
+        Action gotoAction = new Action();
+        gotoAction.setKey("go_to");
+        index = currentActions.indexOf(gotoAction);
+        actions.add(baseCustomizableDialog.createBaseCustomizableInfo("go_to", "Enter id on which the transition will be made (example: 2)",
+                index == -1 ? "" : currentActions.get(index).getValue()));
 
-        attributes.add(baseCustomizableDialog.createBaseCustomizableInfo("text", "Type here button text"));
-        actions.add(baseCustomizableDialog.createBaseCustomizableInfo("go_to", "Enter id on which the transition will be made (example: 2)"));
+        Action bindAction = new Action();
+        bindAction.setKey("bind");
+        index = currentActions.indexOf(bindAction);
+        actions.add(baseCustomizableDialog.createBaseCustomizableInfo("bind", "Bind variable to value of this widget. Set variable's name to bind.",
+                index == -1 ? "" : currentActions.get(index).getValue()));
         baseCustomizableDialog.createDialog(this, context, attributes, actions);
     }
 

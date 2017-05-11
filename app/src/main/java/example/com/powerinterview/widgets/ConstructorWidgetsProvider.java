@@ -40,7 +40,8 @@ public class ConstructorWidgetsProvider implements IWidgetsProvider {
         for (Class widgetClass: widgetsClasses) {
             WidgetEntity widgetEntity = new WidgetEntity();
             widgetEntity.setClassName(widgetClass.getName());
-            widgets[i] = widgetsFactory.create(widgetEntity, context);
+            Widget widget = widgetsFactory.create(widgetEntity, context);
+            widgets[i] = widget;
             i++;
         }
 
