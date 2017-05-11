@@ -12,6 +12,6 @@ public interface InterviewController {
 
     Variable getVariable(String key);
 
-    void setVariable(String key, Variable variable);
+    void setVariable(String key, Object value);
 
 }

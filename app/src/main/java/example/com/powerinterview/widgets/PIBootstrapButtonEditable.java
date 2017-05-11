@@ -46,7 +46,7 @@ public class PIBootstrapButtonEditable extends PIBootstrapButton implements ICus
 
 
         attributes.add(baseCustomizableDialog.createBaseCustomizableInfo("text", "Type here button text"));
-        actions.add(baseCustomizableDialog.createBaseCustomizableInfo("go_to", "Enter id on which the transition will be made (example: 2)"));
+        actions.add(baseCustomizableDialog.createBaseCustomizableInfo("go_to", "Enter id on which the transition will be made (example: 2 or -1 - to end the interview)"));
         baseCustomizableDialog.createDialog(this, context, attributes, actions);
     }
 

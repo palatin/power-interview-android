@@ -63,6 +63,15 @@ public class PIBootstrapButton extends BaseWidget implements Widget, View.OnClic
 
     }
 
+    @Override
+    Object getValue() {
+        Attribute attribute = new Attribute();
+        attribute.setKey("value");
+        List<Attribute> attributes = getAttributes();
+        int index = attributes.indexOf(attribute);
+        return index == - 1 ? view.getText().toString() : attributes.get(index).getValue();
+    }
+
     private void setViewAttributes() {
         for (Attribute attribute : attributes)
         {
