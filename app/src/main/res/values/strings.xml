@@ -22,5 +22,12 @@
     <string name="cancel">Cancel</string>
     <string name="done">Done</string>
     <string name="exception">Some exception occurred</string>
+
     <string name="activate_code">Activate code</string>
+
+    <string name="add_question">Add question</string>
+    <string name="add_condition">Add condition block</string>
+    <string name="manage_variables">Manage variables</string>
+    <string name="add_variable">Add variable</string>
+
 </resources>

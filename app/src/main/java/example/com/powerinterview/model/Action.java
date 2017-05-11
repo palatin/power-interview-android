@@ -12,6 +12,7 @@ import java.io.Serializable;
 public class Action implements Parcelable, Serializable {
 
 
+    private static final long serialVersionUID = -5303257196515386261L;
     private String key;
 
     private String value;
@@ -36,7 +37,7 @@ public class Action implements Parcelable, Serializable {
     public boolean equals(Object obj) {
         boolean equals = false;
         try {
-            if(((Attribute)obj).getKey().equals(getKey()))
+            if(((Action)obj).getKey().equals(getKey()))
                 equals = true;
         }
         finally {

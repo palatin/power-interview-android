@@ -3,7 +3,6 @@ package example.com.powerinterview.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +12,8 @@ import java.util.List;
 public class Question extends InterviewObject implements Parcelable {
 
 
-    private List<Widget> widgets;
+    private static final long serialVersionUID = -9130752311079548914L;
+    private List<WidgetEntity> widgetEntities;
 
     @Override
     public String getTitle() {
@@ -24,12 +24,12 @@ public class Question extends InterviewObject implements Parcelable {
     }
 
 
-    public List<Widget> getWidgets() {
-        return widgets;
+    public List<WidgetEntity> getWidgetEntities() {
+        return widgetEntities;
     }
 
-    public void setWidgets(List<Widget> widgets) {
-        this.widgets = widgets;
+    public void setWidgetEntities(List<WidgetEntity> widgetEntities) {
+        this.widgetEntities = widgetEntities;
     }
 
 
@@ -40,12 +40,12 @@ public class Question extends InterviewObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(this.widgets);
+        dest.writeTypedList(this.widgetEntities);
         dest.writeInt(getId());
     }
 
     protected Question(Parcel in) {
-        this.widgets = in.createTypedArrayList(Widget.CREATOR);
+        this.widgetEntities = in.createTypedArrayList(WidgetEntity.CREATOR);
         setId(in.readInt());
     }
 

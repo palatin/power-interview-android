@@ -4,24 +4,26 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.Spinner;
 
+import java.io.Serializable;
+
 /**
  * Created by Игорь on 16.04.2017.
  */
 
-public class Condition implements Parcelable {
+public class Condition implements Parcelable, Serializable {
 
 
+    private static final long serialVersionUID = 356059348954176726L;
     private String condition;
     private String goTo;
-
 
 
     public String getCondition() {
         return condition;
     }
 
-    public void setCondition(String condtition) {
-        this.condition = condtition;
+    public void setCondition(String condition) {
+        this.condition = condition;
     }
 
     @Override
@@ -61,5 +63,23 @@ public class Condition implements Parcelable {
 
     public void setGoTo(String goTo) {
         this.goTo = goTo;
+    }
+
+    public String getLeftSide() {
+        return condition.split("::")[0];
+    }
+
+    public String getOperand() {
+        return condition.split("::")[1];
+    }
+
+    public String getRightSide() {
+        return condition.split("::")[2];
+    }
+
+
+    @Override
+    public String toString() {
+        return getLeftSide() + " " + getOperand() + " " + getRightSide();
     }
 }

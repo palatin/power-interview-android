@@ -3,7 +3,6 @@ package example.com.powerinterview.widgets;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -13,8 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import example.com.powerinterview.interfaces.ICustomizableWidget;
-import example.com.powerinterview.interfaces.IWidget;
+import example.com.powerinterview.interfaces.Widget;
 import example.com.powerinterview.model.Action;
 import example.com.powerinterview.model.Attribute;
 
@@ -25,7 +23,7 @@ import example.com.powerinterview.model.Attribute;
 public class BaseCustomizableDialog {
 
 
-    public void createDialog(final IWidget widget, Context context, List<BaseCustomizableInfo> attributes, List<BaseCustomizableInfo> actions) {
+    public void createDialog(final Widget widget, Context context, List<BaseCustomizableInfo> attributes, List<BaseCustomizableInfo> actions) {
 
         final AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         final List<EditText> attributesEditTexts = createFields(attributes, context);

@@ -14,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -25,6 +26,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,15 +48,16 @@ import example.com.powerinterview.model.ConditionBlock;
 import example.com.powerinterview.model.Interview;
 import example.com.powerinterview.model.InterviewObject;
 import example.com.powerinterview.model.Question;
+import example.com.powerinterview.model.Variable;
 import example.com.powerinterview.network.InterviewClient;
 import example.com.powerinterview.ui.CustomToast;
 import example.com.powerinterview.utils.Converter;
 
-public class ConstructorActivity extends BaseWorkerActivity implements IEditInterviewObjectListener, ConditionDialog.OnCompleteCondition {
+public class ConstructorActivity extends BaseWorkerActivity implements IEditInterviewObjectListener {
 
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ArrayList<InterviewObject> interviewObjects;
+    private Interview interview;
     private InterviewClient client;
     private AccountManager accountManager;
 
@@ -95,15 +100,10 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
 
 
     private void initInterview() {
-        interviewObjects = new ArrayList<>();
-        /*Question question = new Question();
-        question.setId(1);
-        List<Widget> widgets = new ArrayList<>();
-        Widget widget = new Widget();
-        widget.setClassName(PIBootstrapButton.class.getName());
-        widgets.add(widget);
-        question.setWidgets(widgets);
-        interviewObjects.add(question);*/
+        interview = new Interview();
+        interview.setInterviewObjects(new ArrayList<InterviewObject>());
+        interview.setVariables(new HashMap<String, Variable>());
+
     }
 
     @Override
@@ -116,10 +116,20 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
         if(object instanceof ConditionBlock) {
             Bundle bundle = new Bundle();
             bundle.putParcelable("condition", object);
-            ConditionDialog dialog = new ConditionDialog();
-            dialog.setArguments(bundle);
-            dialog.show(getSupportFragmentManager(), "condition_dialog");
+            HashMap<String, Variable> variableHashMap = interview.getVariables();
+            bundle.putSerializable("variables", variableHashMap);
+            Intent intent = new Intent(this, EditConditionActivity.class);
+            intent.putExtras(bundle);
+            startActivityForResult(intent, 2);
+
         }
+    }
+
+    @Override
+    public void manageVariables() {
+        Intent intent = new Intent(this, ManageVariablesActivity.class);
+        intent.putExtra("variables", interview.getVariables());
+        startActivityForResult(intent, 3);
     }
 
     @Override
@@ -128,16 +138,20 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
             switch (requestCode) {
                 case 1:
                     Question question = data.getParcelableExtra("question");
-                    interviewObjects.set(interviewObjects.indexOf(question), question);
+                    interview.getInterviewObjects().set(interview.getInterviewObjects().indexOf(question), question);
                 break;
+                case 2:
+                    ConditionBlock conditionBlock = data.getParcelableExtra("condition");
+                    interview.getInterviewObjects().set(interview.getInterviewObjects().indexOf(conditionBlock), conditionBlock);
+                    break;
+                case 3:
+                    HashMap<String, Variable> variables = (HashMap<String, Variable>) data.getSerializableExtra("variables");
+                    interview.setVariables(variables);
+                    break;
             }
         }
     }
 
-    @Override
-    public void onCompleteCondition(ConditionBlock conditionBlock) {
-        interviewObjects.set(interviewObjects.indexOf(conditionBlock), conditionBlock);
-    }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
@@ -148,9 +162,9 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
         @Override
         public Fragment getItem(int position) {
             if(position == 0)
-                return InterviewObjectsFragment.newInstance(interviewObjects);
+                return InterviewObjectsFragment.newInstance(interview);
             else
-                return InterviewObjectsVisualizeFragment.newInstance(interviewObjects);
+                return InterviewObjectsVisualizeFragment.newInstance(null);
         }
 
         @Override
@@ -205,11 +219,9 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
                 .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Interview interview = new Interview();
                         interview.setName(interviewName.getText().toString());
                         interview.setDescription(description.getText().toString());
-                        interview.setPassword(password.toString());
-                        interview.setInterviewObjects(interviewObjects);
+                        interview.setPassword(password.getText().toString());
                         uploadInterview(interview);
                     }
                 })

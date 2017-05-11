@@ -12,6 +12,7 @@ import java.io.Serializable;
 public class Attribute implements Parcelable, Serializable {
 
 
+    private static final long serialVersionUID = -764939454733949657L;
     private String key;
 
     private String value;

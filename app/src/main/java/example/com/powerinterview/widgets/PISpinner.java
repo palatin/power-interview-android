@@ -2,27 +2,22 @@ package example.com.powerinterview.widgets;
 
 
 import android.content.Context;
-import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import example.com.powerinterview.interfaces.ICustomizableWidget;
-import example.com.powerinterview.interfaces.IWidget;
+import example.com.powerinterview.interfaces.Widget;
 import example.com.powerinterview.model.Action;
 import example.com.powerinterview.model.Attribute;
-import example.com.powerinterview.model.Widget;
 
 /**
  * Created by Игорь on 13.04.2017.
  */
 
-public class PISpinner extends BaseWidget implements IWidget {
+public class PISpinner extends BaseWidget implements Widget {
 
 
     protected MaterialSpinner view;
@@ -54,6 +49,11 @@ public class PISpinner extends BaseWidget implements IWidget {
         super.setAttributes(attributes);
         setViewAttributes();
 
+    }
+
+    @Override
+    Object getValue() {
+        return view.getItems().get(view.getSelectedIndex());
     }
 
     private void setViewAttributes() {

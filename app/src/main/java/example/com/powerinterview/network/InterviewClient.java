@@ -4,6 +4,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import example.com.powerinterview.exceptions.EncryptionException;
 import example.com.powerinterview.model.Interview;
@@ -23,16 +24,30 @@ public class InterviewClient {
     public void storeInterviewModule(String token, Interview interview, AsyncHttpResponseHandler handler) throws EncryptionException, IOException {
 
         RequestParams params = new RequestParams();
-        params.add("code", token);
+        params.add("code", Encrypt.encryptByRSA(Encrypt.publicServerKey, token));
         params.add("name", interview.getName());
         params.add("description", interview.getDescription());
-        params.add("password", Encrypt.encryptByRSA(Encrypt.publicServerKey,interview.getPassword()));
+        params.add("password", !interview.getPassword().isEmpty() ? Encrypt.encryptByRSA(Encrypt.publicServerKey, interview.getPassword()) : "");
         params.add("hash", WebClient.getHash());
         params.put("file", interview.getInputStream());
         WebClient.post("store_pi_module.php",params, handler);
 
     }
 
+
+    public void sendInterviewResults(String token, int interviewId, InputStream interviewLog, InputStream audio, String aesKey, AsyncHttpResponseHandler handler) throws EncryptionException, IOException {
+
+        RequestParams params = new RequestParams();
+        params.add("code", Encrypt.encryptByRSA(Encrypt.publicServerKey, token));
+        params.add("interview_id", String.valueOf(interviewId));
+        params.add("aes_key", Encrypt.encryptByRSA(Encrypt.publicServerKey, aesKey));
+        params.add("hash", WebClient.getHash());
+        if(audio != null)
+            params.put("audio", audio);
+        params.put("results", interviewLog);
+        WebClient.post("upload_interview.php",params, handler);
+
+    }
 
     public void getInterviewsModules(String token, JsonHttpResponseHandler handler) throws EncryptionException {
 
