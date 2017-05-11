@@ -11,6 +11,8 @@ public interface InterviewProvider {
 
     void displayViews(View[] views);
 
+    void endInterview();
+
     Context getContext();
 
 }

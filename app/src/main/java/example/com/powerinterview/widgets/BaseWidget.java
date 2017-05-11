@@ -3,6 +3,7 @@ package example.com.powerinterview.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import example.com.powerinterview.core.InterviewLogger;
 import example.com.powerinterview.interfaces.ActionListener;
 import example.com.powerinterview.interfaces.Command;
 import example.com.powerinterview.interfaces.InterviewController;
@@ -66,6 +67,8 @@ abstract class BaseWidget implements Widget {
         this.listener = listener;
     }
 
+    abstract Object getValue();
+
 
     protected void produceActions() {
         List<Command> commands = new ArrayList<>();
@@ -75,7 +78,16 @@ abstract class BaseWidget implements Widget {
                 commands.add(new Command() {
                     @Override
                     public void execute(InterviewController controller) {
+                        InterviewLogger.writeToInterviewLog("Respondent chose " + getValue());
                         controller.moveTo(Integer.parseInt(action.getValue()));
+                    }
+                });
+            }
+            if(action.getKey().equals("bind")) {
+                commands.add(new Command() {
+                    @Override
+                    public void execute(InterviewController controller) {
+                        controller.setVariable(action.getValue(), getValue());
                     }
                 });
             }

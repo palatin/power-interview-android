@@ -51,6 +51,11 @@ public class PISpinner extends BaseWidget implements Widget {
 
     }
 
+    @Override
+    Object getValue() {
+        return view.getItems().get(view.getSelectedIndex());
+    }
+
     private void setViewAttributes() {
         for (Attribute attribute : attributes)
         {

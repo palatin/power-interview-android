@@ -121,6 +121,7 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
             File file = interviewsTemplatesManager.getFileTemplateById(interviewTemplate.getId(), getApplicationContext());
             Intent intent = new Intent(InterviewPickerActivity.this, InterviewActivity.class);
             intent.putExtra("template", file);
+            intent.putExtra("id", interviewTemplate.getId());
             startActivity(intent);
             finish();
         } catch (NullPointerException | FileNotFoundException e) {
