@@ -9,6 +9,7 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.List;
 
+import example.com.powerinterview.interfaces.ActionListener;
 import example.com.powerinterview.interfaces.Widget;
 import example.com.powerinterview.model.Action;
 import example.com.powerinterview.model.Attribute;
@@ -17,7 +18,7 @@ import example.com.powerinterview.model.Attribute;
  * Created by Игорь on 13.04.2017.
  */
 
-public class PISpinner extends BaseWidget implements Widget {
+public class PISpinner extends BaseWidget implements Widget, MaterialSpinner.OnItemSelectedListener {
 
 
     protected MaterialSpinner view;
@@ -26,7 +27,13 @@ public class PISpinner extends BaseWidget implements Widget {
         super(attributes, actions);
 
         view = new MaterialSpinner(context);
+
+        view.setOnItemSelectedListener(this);
+
         defaultInit();
+
+
+
     }
 
 
@@ -38,22 +45,23 @@ public class PISpinner extends BaseWidget implements Widget {
         layoutParams.setMargins(0, 60, 0, 0);
 
         view.setLayoutParams(layoutParams);
-
-        setViewAttributes();
-    }
-
-
-    @Override
-    public void setAttributes(List<Attribute> attributes) {
-
-        super.setAttributes(attributes);
         setViewAttributes();
 
     }
+
+
+
 
     @Override
     Object getValue() {
         return view.getItems().get(view.getSelectedIndex());
+    }
+
+    @Override
+    public void setActionListener(ActionListener listener) {
+        super.setActionListener(listener);
+        //when listener attached we need to produce actions, for example to bind variable
+        produceActions();
     }
 
     private void setViewAttributes() {
@@ -71,5 +79,10 @@ public class PISpinner extends BaseWidget implements Widget {
     @Override
     public View getView() {
         return view;
+    }
+
+    @Override
+    public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+        produceActions();
     }
 }

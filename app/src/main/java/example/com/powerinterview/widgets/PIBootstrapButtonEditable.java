@@ -19,7 +19,7 @@ import example.com.powerinterview.model.WidgetEntity;
 public class PIBootstrapButtonEditable extends PIBootstrapButton implements ICustomizableWidget, Widget {
 
 
-    private BaseCustomizableDialog baseCustomizableDialog = new BaseCustomizableDialog();
+    private BaseCustomizableDialog baseCustomizableDialog;
 
     public PIBootstrapButtonEditable(List<Attribute> attributes, List<Action> actions, Context context) {
         super(attributes, actions, context);
@@ -36,7 +36,7 @@ public class PIBootstrapButtonEditable extends PIBootstrapButton implements ICus
     @Override
     public void customize() {
 
-
+        baseCustomizableDialog = new BaseCustomizableDialog();
         Context context = view.getContext();
 
         List<BaseCustomizableDialog.BaseCustomizableInfo> attributes = new ArrayList<>();

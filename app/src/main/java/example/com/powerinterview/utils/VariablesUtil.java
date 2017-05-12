@@ -10,9 +10,6 @@ import example.com.powerinterview.model.Variable;
 
 public class VariablesUtil {
 
-    public static Variable.Type identifyVariableType(Object object) {
-        return null;
-    }
 
     public static Variable parseVariableToExpectType(Variable variable) {
         Object object = variable.getValue();

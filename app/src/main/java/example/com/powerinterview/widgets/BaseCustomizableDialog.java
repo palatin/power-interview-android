@@ -67,10 +67,13 @@ public class BaseCustomizableDialog {
 
                 List<Action> actions = new ArrayList<>();
                 for (EditText editText: actionsEditTexts) {
-                    Action action = new Action();
-                    action.setKey(editText.getTag().toString());
-                    action.setValue(editText.getText().toString());
-                    actions.add(action);
+                    String value = editText.getText().toString();
+                    if(!value.isEmpty()) {
+                        Action action = new Action();
+                        action.setKey(editText.getTag().toString());
+                        action.setValue(editText.getText().toString());
+                        actions.add(action);
+                    }
                 }
                 widget.setAttributes(attributes);
                 widget.setActions(actions);

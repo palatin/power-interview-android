@@ -98,7 +98,7 @@ public class BaseInterviewController implements InterviewController {
     public void setVariable(String key, Object value) {
         Variable variable = interview.getVariables().get(key);
         variable.castObjectToSameType(value);
-        variable.setValue(value);
+        variable.setValue(variable.castObjectToSameType(value));
         interview.getVariables().put(key, variable);
     }
 }

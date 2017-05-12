@@ -18,6 +18,8 @@ import example.com.powerinterview.model.WidgetEntity;
 public class PISpinnerEditable extends PISpinner implements ICustomizableWidget {
 
 
+    BaseCustomizableDialog baseCustomizableDialog;
+
     public PISpinnerEditable(List<Attribute> attributes, List<Action> actions, Context context) {
 
         super(attributes, actions, context);
@@ -34,6 +36,10 @@ public class PISpinnerEditable extends PISpinner implements ICustomizableWidget 
 
     @Override
     public void customize() {
+
+
+        baseCustomizableDialog = new BaseCustomizableDialog();
+
         Context context = view.getContext();
 
         List<BaseCustomizableDialog.BaseCustomizableInfo> attributes = new ArrayList<>();

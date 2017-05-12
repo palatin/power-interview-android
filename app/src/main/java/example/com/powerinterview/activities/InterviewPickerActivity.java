@@ -171,7 +171,7 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
+                    dismissProgressDialog();
                     for (Header header: headers) {
                         writeDebugLog("Interview loader", "Result form loading interview module: " + header.getName() + " " + header.getValue());
                         if(header.getName().equals("Content-Type")) {

@@ -46,14 +46,14 @@ public class PIBootstrapLabel extends BaseWidget implements Widget {
         layoutParams.setMargins(0, 60, 0, 0);
 
         view.setLayoutParams(layoutParams);
+        setViewAttributes();
     }
 
+
+
     @Override
-    public void setAttributes(List<Attribute> attributes) {
-
-        super.setAttributes(attributes);
-        setViewAttributes();
-
+    Object getValue() {
+        return null;
     }
 
     private void setViewAttributes() {

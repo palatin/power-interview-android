@@ -6,6 +6,12 @@ package example.com.powerinterview.interfaces;
 
 public interface Command {
 
-
     void execute(InterviewController controller);
+
+    QueueStatus getQueue();
+
+    enum QueueStatus {
+        BaseQueue,
+        LastQueue
+    }
 }

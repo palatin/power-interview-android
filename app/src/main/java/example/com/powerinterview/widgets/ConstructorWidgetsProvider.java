@@ -52,7 +52,7 @@ public class ConstructorWidgetsProvider implements IWidgetsProvider {
     public ICustomizableWidget getEditableSpecificWidget(Widget widget, Context context) throws FactoryException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 
         return (ICustomizableWidget) Class.forName(widget.getClass().getName() + "Editable").getDeclaredConstructor(List.class, List.class, Context.class)
-                .newInstance(widget.getAttributes(), widget.getActions(), context);
+                .newInstance(null, null, context);
     }
 
     @Override

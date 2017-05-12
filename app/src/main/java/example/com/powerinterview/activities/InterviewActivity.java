@@ -50,7 +50,7 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
     private Unbinder unbinder;
     private InterviewsTemplatesManager interviewsTemplatesManager;
     private BaseInterviewController controller;
-    private int interviewID;
+    private long interviewID;
 
     private InterviewClient interviewClient;
 
@@ -65,7 +65,7 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
         setContentView(R.layout.activity_interview);
 
         File file = (File) getIntent().getSerializableExtra("template");
-        interviewID = getIntent().getIntExtra("id", -1);
+        interviewID = getIntent().getLongExtra("id", -1);
         if(interviewID == -1)
             finish();
 

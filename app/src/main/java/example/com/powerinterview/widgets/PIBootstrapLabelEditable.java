@@ -18,7 +18,7 @@ import example.com.powerinterview.model.WidgetEntity;
 public class PIBootstrapLabelEditable extends PIBootstrapLabel implements ICustomizableWidget {
 
 
-    private BaseCustomizableDialog baseCustomizableDialog = new BaseCustomizableDialog();
+    private BaseCustomizableDialog baseCustomizableDialog;
 
     public PIBootstrapLabelEditable(List<Attribute> attributes, List<Action> actions, Context context) {
         super(attributes, actions, context);
@@ -35,6 +35,7 @@ public class PIBootstrapLabelEditable extends PIBootstrapLabel implements ICusto
     @Override
     public void customize() {
 
+        baseCustomizableDialog = new BaseCustomizableDialog();
         Context context = view.getContext();
 
         List<BaseCustomizableDialog.BaseCustomizableInfo> attributes = new ArrayList<>();

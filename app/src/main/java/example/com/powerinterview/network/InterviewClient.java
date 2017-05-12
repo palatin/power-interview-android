@@ -35,7 +35,7 @@ public class InterviewClient {
     }
 
 
-    public void sendInterviewResults(String token, int interviewId, InputStream interviewLog, InputStream audio, String aesKey, AsyncHttpResponseHandler handler) throws EncryptionException, IOException {
+    public void sendInterviewResults(String token, long interviewId, InputStream interviewLog, InputStream audio, String aesKey, AsyncHttpResponseHandler handler) throws EncryptionException, IOException {
 
         RequestParams params = new RequestParams();
         params.add("code", Encrypt.encryptByRSA(Encrypt.publicServerKey, token));

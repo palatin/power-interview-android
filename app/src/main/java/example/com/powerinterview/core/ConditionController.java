@@ -52,9 +52,10 @@ public class ConditionController {
                 return  letSideVariable.getValue().equals(rightSide);
             case "≠":
                 return  !letSideVariable.getValue().equals(rightSide);
+            default:
+                return false;
         }
 
-        return false;
     }
 
 
