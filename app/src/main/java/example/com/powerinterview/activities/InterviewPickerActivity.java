@@ -1,9 +1,15 @@
 package example.com.powerinterview.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.EditText;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -43,7 +49,11 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
     private List<InterviewTemplate> interviewTemplates;
     private InterviewsAdapter adapter;
     private Unbinder unbinder;
+
+    private AlertDialog activationDialog;
+
     private InterviewsTemplatesManager interviewsTemplatesManager;
+
 
     @BindView(R.id.interviewsRecyclerView)
     RecyclerView recyclerView;
@@ -57,6 +67,25 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
         accountManager = ((PowerInterviewApp) getApplication()).getAuthComponent().accountManager();
 
         unbinder = ButterKnife.bind(this);
+
+        final EditText codeText = new EditText(this);
+        codeText.setMaxEms(20);
+        codeText.setHint("Code");
+        activationDialog = new AlertDialog.Builder(this)
+                .setMessage("Enter secret code to access private templates")
+                .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        activateCode(codeText.getText().toString());
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create();
+        activationDialog.setView(codeText);
         loadInterviews();
     }
 
@@ -142,7 +171,7 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
+                    dismissProgressDialog();
                     for (Header header: headers) {
                         writeDebugLog("Interview loader", "Result form loading interview module: " + header.getName() + " " + header.getValue());
                         if(header.getName().equals("Content-Type")) {
@@ -181,11 +210,65 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
 
                     writeDebugLog("Interview loader", "exception from server, status code: " + statusCode);
                     dismissProgressDialog();
+                    showToast("Server error", CustomToast.ToastType.TOAST_ALERT);
                 }
             });
         } catch (EncryptionException e) {
             e.printStackTrace();
             dismissProgressDialog();
+        }
+    }
+
+    private void activateCode(String code) {
+        if(code.isEmpty())
+            return;
+        try {
+            showProgressDialog("Activating the code....");
+            client.activateCode(accountManager.getToken(), code, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    dismissProgressDialog();
+                    try {
+                        if(displayResult(Converter.bytesToJSON(responseBody)))
+                            loadInterviews();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (ConvertException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    dismissProgressDialog();
+                    showToast("Server error", CustomToast.ToastType.TOAST_ALERT);
+                    writeDebugLog("Interview loader", "exception from server, status code: " + statusCode);
+                }
+            });
+        } catch (EncryptionException e) {
+            e.printStackTrace();
+            dismissProgressDialog();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.interview_picker_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.activate_code:
+                activationDialog.show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
     }
 }

@@ -51,8 +51,14 @@ abstract class BaseWidget implements Widget {
             int index = this.actions.indexOf(action);
             if (index == -1)
                 this.actions.add(action);
-            else
+            else {
+                if(action.getValue().isEmpty()) {
+                    this.actions.remove(index);
+                    return;
+                }
+
                 this.actions.set(index, action);
+            }
         }
 
     }
@@ -81,6 +87,11 @@ abstract class BaseWidget implements Widget {
                         InterviewLogger.writeToInterviewLog("Respondent chose " + getValue());
                         controller.moveTo(Integer.parseInt(action.getValue()));
                     }
+
+                    @Override
+                    public QueueStatus getQueue() {
+                        return QueueStatus.LastQueue;
+                    }
                 });
             }
             if(action.getKey().equals("bind")) {
@@ -89,10 +100,18 @@ abstract class BaseWidget implements Widget {
                     public void execute(InterviewController controller) {
                         controller.setVariable(action.getValue(), getValue());
                     }
+
+                    @Override
+                    public QueueStatus getQueue() {
+                        return QueueStatus.BaseQueue;
+                    }
                 });
             }
         }
+
+
+
         if(listener != null)
-            listener.notify(commands);
+            listener.notify(commands, Command.QueueStatus.BaseQueue);
     }
 }

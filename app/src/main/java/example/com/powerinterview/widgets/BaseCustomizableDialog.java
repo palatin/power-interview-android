@@ -3,6 +3,7 @@ package example.com.powerinterview.widgets;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import example.com.powerinterview.R;
 import example.com.powerinterview.interfaces.Widget;
 import example.com.powerinterview.model.Action;
 import example.com.powerinterview.model.Attribute;
@@ -29,32 +31,32 @@ public class BaseCustomizableDialog {
         final List<EditText> attributesEditTexts = createFields(attributes, context);
         final List<EditText> actionsEditTexts = createFields(actions, context);
 
-        LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        View dialogView = inflater.inflate(R.layout.dialog_cistomize_widget, null);
 
-
-        ScrollView scrollView = new ScrollView(context);
-        scrollView.addView(linearLayout);
-        TextView attributesTextView = new TextView(context);
-        attributesTextView.setText("Attributes");
-        linearLayout.addView(attributesTextView);
+        LinearLayout attributesLayout = (LinearLayout) dialogView.findViewById(R.id.attributesLayout);
+        LinearLayout actionsLayout = (LinearLayout) dialogView.findViewById(R.id.actionsLayout);
         for (View view: attributesEditTexts) {
-            linearLayout.addView(view);
+            attributesLayout.addView(view);
         }
 
-        TextView actionsTextView = new TextView(context);
-        actionsTextView.setText("Actions");
-        linearLayout.addView(actionsTextView);
 
         for (View view: actionsEditTexts) {
-            linearLayout.addView(view);
+            actionsLayout.addView(view);
         }
 
-        alertDialog.setView(scrollView);
-        alertDialog.setTitle("Customize this widget!");
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Done", new DialogInterface.OnClickListener() {
+
+
+        dialogView.findViewById(R.id.cancelButton).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+
+        dialogView.findViewById(R.id.doneButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 List<Attribute> attributes = new ArrayList<>();
                 for (EditText editText: attributesEditTexts) {
                     Attribute attribute = new Attribute();
@@ -65,22 +67,25 @@ public class BaseCustomizableDialog {
 
                 List<Action> actions = new ArrayList<>();
                 for (EditText editText: actionsEditTexts) {
-                    Action action = new Action();
-                    action.setKey(editText.getTag().toString());
-                    action.setValue(editText.getText().toString());
-                    actions.add(action);
+                    String value = editText.getText().toString();
+                    if(!value.isEmpty()) {
+                        Action action = new Action();
+                        action.setKey(editText.getTag().toString());
+                        action.setValue(editText.getText().toString());
+                        actions.add(action);
+                    }
                 }
                 widget.setAttributes(attributes);
                 widget.setActions(actions);
-            }
-        });
-
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
                 alertDialog.dismiss();
             }
         });
+
+        alertDialog.setView(dialogView);
+        alertDialog.setTitle("Customize this widget!");
+
+
+
 
         alertDialog.show();
 
@@ -93,25 +98,30 @@ public class BaseCustomizableDialog {
             EditText editText = new EditText(context);
             editText.setTag(info.getAttributeKey());
             editText.setHint(info.getUserHint().isEmpty() ? info.getAttributeKey() : info.getUserHint());
+            editText.setText(info.currentValue);
             editTexts.add(editText);
         }
 
         return editTexts;
     }
 
-    public BaseCustomizableInfo createBaseCustomizableInfo(String attributeKey, String userHint) {
+    public BaseCustomizableInfo createBaseCustomizableInfo(String attributeKey, String userHint, String value) {
 
         BaseCustomizableInfo baseCustomizableInfo = new BaseCustomizableInfo(attributeKey);
 
         baseCustomizableInfo.setUserHint(userHint);
 
+        baseCustomizableInfo.setCurrentValue(value);
+
         return baseCustomizableInfo;
     }
+
 
     class BaseCustomizableInfo {
 
         private String attributeKey;
         private String userHint;
+        private String currentValue = "";
 
         BaseCustomizableInfo(String attributeKey) {
             this.attributeKey = attributeKey;
@@ -128,6 +138,14 @@ public class BaseCustomizableDialog {
 
         void setUserHint(String userHint) {
             this.userHint = userHint;
+        }
+
+        public String getCurrentValue() {
+            return currentValue;
+        }
+
+        public void setCurrentValue(String currentValue) {
+            this.currentValue = currentValue;
         }
     }
 }

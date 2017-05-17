@@ -10,5 +10,6 @@ import example.com.powerinterview.model.Action;
 
 public interface ActionListener {
 
-    void notify(List<Command> commands);
+
+    void notify(List<Command> commands, Command.QueueStatus queueStatus);
 }

@@ -51,9 +51,19 @@ public class QuestionController implements ActionListener {
 
 
     @Override
-    public void notify(List<Command> commands) {
+    public void notify(List<Command> commands, Command.QueueStatus queueStatus) {
         for (Command command: commands) {
-            command.execute(interviewController);
+
+            if(command.getQueue().equals(queueStatus)) {
+
+                command.execute(interviewController);
+                commands.remove(command);
+            }
         }
+
+        if(!commands.isEmpty()) {
+            this.notify(commands, Command.QueueStatus.LastQueue);
+        }
+
     }
 }

@@ -53,16 +53,6 @@ public class PIBootstrapButton extends BaseWidget implements Widget, View.OnClic
 
 
 
-
-
-    @Override
-    public void setAttributes(List<Attribute> attributes) {
-
-        super.setAttributes(attributes);
-        setViewAttributes();
-
-    }
-
     @Override
     Object getValue() {
         Attribute attribute = new Attribute();

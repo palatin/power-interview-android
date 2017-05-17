@@ -18,6 +18,8 @@ import example.com.powerinterview.model.WidgetEntity;
 public class PISpinnerEditable extends PISpinner implements ICustomizableWidget {
 
 
+    BaseCustomizableDialog baseCustomizableDialog;
+
     public PISpinnerEditable(List<Attribute> attributes, List<Action> actions, Context context) {
 
         super(attributes, actions, context);
@@ -34,6 +36,10 @@ public class PISpinnerEditable extends PISpinner implements ICustomizableWidget 
 
     @Override
     public void customize() {
+
+
+        baseCustomizableDialog = new BaseCustomizableDialog();
+
         Context context = view.getContext();
 
         List<BaseCustomizableDialog.BaseCustomizableInfo> attributes = new ArrayList<>();
@@ -44,7 +50,23 @@ public class PISpinnerEditable extends PISpinner implements ICustomizableWidget 
 
         BaseCustomizableDialog baseCustomizableDialog = new BaseCustomizableDialog();
 
-        attributes.add(baseCustomizableDialog.createBaseCustomizableInfo("data", "Type here list data with \";\" example(text1;text2)"));
+        List<Attribute> currentAttributes = getAttributes();
+        List<Action> currentActions = getActions();
+
+        int index = -1;
+
+        Attribute attribute = new Attribute();
+        attribute.setKey("data");
+        index = currentAttributes.indexOf(attribute);
+
+        attributes.add(baseCustomizableDialog.createBaseCustomizableInfo("data", "Type here list data with \";\" example(text1;text2)",
+                index == -1 ? "" : currentAttributes.get(index).getValue()));
+
+        Action bindAction = new Action();
+        bindAction.setKey("bind");
+        index = currentActions.indexOf(bindAction);
+        actions.add(baseCustomizableDialog.createBaseCustomizableInfo("bind", "Bind variable to value of this widget. Set variable's name to bind.",
+                index == -1 ? "" : currentActions.get(index).getValue()));
         baseCustomizableDialog.createDialog(this, context, attributes, actions);
     }
 
