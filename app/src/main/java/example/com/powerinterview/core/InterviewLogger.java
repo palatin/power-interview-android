@@ -1,5 +1,7 @@
 package example.com.powerinterview.core;
 
+import android.util.Base64;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -21,7 +23,11 @@ public class InterviewLogger {
     }
 
     public static byte[] getResults(String encryptKey) throws Exception {
-        return Encrypt.decryptByAES(stringBuilder.toString(), encryptKey).getBytes();
+        return Encrypt.encryptAES(stringBuilder.toString(), encryptKey).getBytes();
+    }
+
+    public static void clearLog() {
+        stringBuilder.setLength(0);
     }
 
 }

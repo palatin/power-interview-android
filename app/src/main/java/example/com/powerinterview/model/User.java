@@ -38,4 +38,13 @@ public class User implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof User)) {
+            return false;
+        }
+        User user = (User) obj;
+        return email.equals(user.getEmail()) && password.equals(user.getPassword());
+    }
 }

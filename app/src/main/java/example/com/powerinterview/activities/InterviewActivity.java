@@ -5,23 +5,31 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -93,6 +101,10 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
         }
 
 
+        //clear log
+        InterviewLogger.clearLog();
+
+
     }
 
 
@@ -125,6 +137,7 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
                             Map.Entry<String, Variable> pair = (Map.Entry)it.next();
                             InterviewLogger.writeToInterviewLog(pair.getKey() + "---- " + pair.getValue().getValue());
                         }
+                        sendInterview();
 
                     }
                 })
@@ -138,28 +151,65 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
     }
 
     private void sendInterview() {
-        SecureRandom random = new SecureRandom();
-        String aesKey = new BigInteger(130, random).toString(32);
+        KeyGenerator keyGen = null;
         try {
-            interviewClient.sendInterviewResults(accountManager.getToken(), interviewID, new ByteArrayInputStream(InterviewLogger.getResults(aesKey)),null, aesKey,
-            new AsyncHttpResponseHandler() {
+            keyGen = KeyGenerator.getInstance("AES");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return;
+        }
+        keyGen.init(256);
+        SecretKey secretKey = keyGen.generateKey();
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+        String aes = Base64.encodeToString(secretKey.getEncoded(), Base64.DEFAULT);
 
-                    dismissProgressDialog();
+        try {
+            showProgressDialog("Uploading....");
+            interviewClient.sendInterviewResults(accountManager.getToken(), interviewID, new ByteArrayInputStream(InterviewLogger.getResults(aes)),null, aes,
+                new JsonHttpResponseHandler() {
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                        dismissProgressDialog();
+
+                        try {
+                            if(displayResult(response)) {
+
+                                showSuccessDialog(response.getString("key"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
 
-                }
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-                }
-            });
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        dismissProgressDialog();
+                        writeDebugLog("Interview loader", "exception from server, status code: " + statusCode + "message: " + responseString);
+                    }
+                });
         } catch (Exception e) {
+            dismissProgressDialog();
             e.printStackTrace();
         }
+    }
+
+    private void showSuccessDialog(String key) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setMessage("Interview has been successfully uploaded \n" + "Your secret key - " + key)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                })
+                .create();
+        alertDialog.setCancelable(false);
+        alertDialog.show();
     }
 
     @Override
