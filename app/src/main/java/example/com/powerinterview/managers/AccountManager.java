@@ -35,10 +35,12 @@ public class AccountManager {
 
 
     public void storeAccount(User user, Context context) throws Exception {
-        removeAccount();
-        user.setPassword(Encrypt.encryptByAES(user.getPassword(), getEncryptKey(context)));
-        SugarRecord.save(user);
-        storeUser(user);
+        if(account.getUser() == null || !account.getUser().equals(user)) {
+            removeAccount();
+            user.setPassword(Encrypt.encryptByAES(user.getPassword(), getEncryptKey(context)));
+            SugarRecord.save(user);
+            storeUser(user);
+        }
     }
 
     public void removeAccount() {

@@ -18,6 +18,8 @@ import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import example.com.powerinterview.exceptions.EncryptionException;
 
@@ -47,15 +49,35 @@ public class Encrypt {
         }
     }
 
+    public static String encryptAES(String value, String key) throws Exception {
+        try {
+            byte[] bytes = "0111872818520578".getBytes("UTF-8");
+            IvParameterSpec iv = new IvParameterSpec(bytes);
+            SecretKeySpec skeySpec = new SecretKeySpec(Base64.decode(key,Base64.DEFAULT), "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+
+            byte[] encrypted = cipher.doFinal(value.getBytes());
+
+            return Base64.encodeToString(encrypted, Base64.DEFAULT);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new Exception();
+        }
+
+    }
+
     public static String decryptByAES(String input, String key) throws Exception {
 
         try {
             return AESCrypt.decrypt(key, input);
         }
         catch (Exception ex) {
-            throw new Exception();
+            throw new Exception(ex);
         }
     }
+
+
 
     public static String encryptByRSA(String key, String input) throws EncryptionException {
 
