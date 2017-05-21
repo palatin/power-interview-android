@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+
 import javax.inject.Inject;
 
 import example.com.powerinterview.exceptions.EncryptionException;
@@ -28,12 +29,11 @@ import example.com.powerinterview.utils.Encrypt;
 public class WebClient {
 
 
-    private static final String BASE_URL = "http://159.203.25.140/childfirst_api/";
+    private static final String BASE_URL = "http://159.203.25.140/powerinterview_api/";
 
     private static HTTPRequest currentRequest;
 
-    //@Inject
-    private static AsyncHttpClient client;
+    private static AsyncHttpClient client = new AsyncHttpClient();
 
 
     public static void get(String scriptURL, RequestParams params, AsyncHttpResponseHandler responseHandler) {
