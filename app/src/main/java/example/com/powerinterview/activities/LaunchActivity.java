@@ -27,7 +27,7 @@ public class LaunchActivity extends AppCompatActivity {
                 Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
 
             AlertDialog dialog =  new AlertDialog.Builder(this).setTitle("Permission")
-                    .setMessage("To implement the autologin, app need permission to receive information about the phone.")
+                    .setMessage(R.string.autologin_permission)
                     .setPositiveButton("Done", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

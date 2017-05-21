@@ -40,6 +40,7 @@ import example.com.powerinterview.core.BaseInterviewController;
 import example.com.powerinterview.core.InterviewLogger;
 import example.com.powerinterview.core.PowerInterviewApp;
 import example.com.powerinterview.exceptions.ConvertException;
+import example.com.powerinterview.exceptions.EncryptionException;
 import example.com.powerinterview.exceptions.FactoryException;
 import example.com.powerinterview.exceptions.InterviewElementNotFoundException;
 import example.com.powerinterview.interfaces.InterviewProvider;
@@ -50,6 +51,7 @@ import example.com.powerinterview.model.Variable;
 import example.com.powerinterview.network.InterviewClient;
 import example.com.powerinterview.ui.CustomToast;
 import example.com.powerinterview.utils.Converter;
+import example.com.powerinterview.utils.Encrypt;
 
 public class InterviewActivity extends BaseWorkerActivity implements InterviewProvider {
 
@@ -151,20 +153,17 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
     }
 
     private void sendInterview() {
-        KeyGenerator keyGen = null;
+
+        String aes = null;
         try {
-            keyGen = KeyGenerator.getInstance("AES");
-        } catch (NoSuchAlgorithmException e) {
+            aes = Encrypt.generateRandomAESKey();
+        } catch (EncryptionException e) {
             e.printStackTrace();
             return;
         }
-        keyGen.init(256);
-        SecretKey secretKey = keyGen.generateKey();
-
-        String aes = Base64.encodeToString(secretKey.getEncoded(), Base64.DEFAULT);
 
         try {
-            showProgressDialog("Uploading....");
+            showProgressDialog(getString(R.string.uploading));
             interviewClient.sendInterviewResults(accountManager.getToken(), interviewID, new ByteArrayInputStream(InterviewLogger.getResults(aes)),null, aes,
                 new JsonHttpResponseHandler() {
 
@@ -199,7 +198,7 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
 
     private void showSuccessDialog(String key) {
         AlertDialog alertDialog = new AlertDialog.Builder(this)
-                .setMessage("Interview has been successfully uploaded \n" + "Your secret key - " + key)
+                .setMessage(getString(R.string.inrerview_upload_success)  + key)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -208,7 +207,6 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
                     }
                 })
                 .create();
-        alertDialog.setCancelable(false);
         alertDialog.show();
     }
 

@@ -55,8 +55,11 @@ public class BaseWorkerActivity extends AppCompatActivity {
     protected boolean displayResult(JSONObject obj) throws JSONException {
         CustomToast.ToastType toastType = obj.getString("type").equals("success") ? CustomToast.ToastType.TOAST_SUCCESS : CustomToast.ToastType.TOAST_ALERT;
         try {
-            String message = obj.getString("msg");
-            showToast(message, toastType);
+            if(obj.has("msg")) {
+                String message = obj.getString("msg");
+                showToast(message, toastType);
+            }
+
         }
         catch (Exception ex) {
             ex.printStackTrace();

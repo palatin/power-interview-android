@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Power Interview</string>
+    <string name="title_activity_login">Зайти</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="action_sign_in">Зайти</string>
+    <string name="error_invalid_email">Неправильный email</string>
+    <string name="error_invalid_password">Пароль короткий</string>
+    <string name="error_incorrect_password">Не правильній пароль</string>
+    <string name="error_field_required">Это поле обязательно</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="register">Регистрация</string>
+    <string name="title_activity_constructor">Конструктор шаблонов</string>
+    <string name="action_settings">Настройки</string>
+    <string name="delete">Удалить</string>
+    <string name="edit">Редактировать</string>
+    <string name="cancel">Отмена</string>
+    <string name="done">Готово</string>
+    <string name="exception">Возникла ошибка</string>
+
+    <string name="activate_code">Активировать код</string>
+
+    <string name="add_question">Добавить вопрос</string>
+    <string name="add_condition">Добавить блок условий</string>
+    <string name="manage_variables">Управление переменными</string>
+    <string name="add_variable">Добавить переменную</string>
+    <string name="autologin_permission">Чтобы включить функцию автологина приложению необоходимо разрешение на информацию о телефоне</string>
+    <string name="restore_report_key">Вы хотите восстановить секретный ключ?</string>
+    <string name="uploading">Загрузка....</string>
+    <string name="inrerview_upload_success">Интервью было успешно загружено\nВаш секретный ключ -\u00A0</string>
+    <string name="new_report_key">Ваш новый ключ -\u00A0</string>
+    <string name="please_wait">Пожалуйста подождите...</string>
+
+</resources>

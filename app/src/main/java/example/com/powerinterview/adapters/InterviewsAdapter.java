@@ -78,7 +78,7 @@ public class InterviewsAdapter extends RecyclerView.Adapter<InterviewsAdapter.Vi
             super(itemView);
 
             interviewName = (TextView) itemView.findViewById(R.id.interviewName);
-            interviewAuthor = (TextView) itemView.findViewById(R.id.interviewAuthor);
+            interviewAuthor = (TextView) itemView.findViewById(R.id.respondentEmail);
             interviewDescription = (TextView) itemView.findViewById(R.id.interviewDescription);
         }
     }

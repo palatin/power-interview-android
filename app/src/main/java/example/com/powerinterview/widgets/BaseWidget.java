@@ -76,7 +76,7 @@ abstract class BaseWidget implements Widget {
     abstract Object getValue();
 
 
-    protected void produceActions() {
+    public void produceActions() {
         List<Command> commands = new ArrayList<>();
 
         for (final Action action: actions) {
