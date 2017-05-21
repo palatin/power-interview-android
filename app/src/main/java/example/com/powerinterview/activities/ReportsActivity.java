@@ -75,6 +75,16 @@ public class ReportsActivity extends BaseWorkerActivity implements InterviewRepo
         try {
             client.getInterviewsReports(accountManager.getToken(), new JsonHttpResponseHandler() {
 
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+                        displayResult(response);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 

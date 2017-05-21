@@ -35,5 +35,7 @@
     <string name="inrerview_upload_success">Interview has been successfully uploaded\nYour secret key -\u00A0</string>
     <string name="new_report_key">Your new key -\u00A0</string>
     <string name="please_wait">Please wait...</string>
+    <string name="interview_template_uploaded">Interview has been successfully uploaded</string>
+    <string name="respondent_email_string">Respondent\'s email:</string>
 
 </resources>

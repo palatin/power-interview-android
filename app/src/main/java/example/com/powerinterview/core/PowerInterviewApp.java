@@ -2,6 +2,7 @@ package example.com.powerinterview.core;
 
 
 import android.app.Application;
+import android.content.Context;
 
 
 import com.orm.SugarContext;

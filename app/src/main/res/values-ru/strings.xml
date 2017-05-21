@@ -35,5 +35,7 @@
     <string name="inrerview_upload_success">Интервью было успешно загружено\nВаш секретный ключ -\u00A0</string>
     <string name="new_report_key">Ваш новый ключ -\u00A0</string>
     <string name="please_wait">Пожалуйста подождите...</string>
+    <string name="interview_template_uploaded">Interview has been successfully uploaded</string>
+    <string name="respondent_email_string">Почта респондента:</string>
 
 </resources>

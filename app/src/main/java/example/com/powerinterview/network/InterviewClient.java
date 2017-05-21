@@ -3,6 +3,7 @@ package example.com.powerinterview.network;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -21,7 +22,7 @@ import example.com.powerinterview.utils.Encrypt;
 public class InterviewClient {
 
 
-    public void storeInterviewModule(String token, Interview interview, AsyncHttpResponseHandler handler) throws EncryptionException, IOException {
+    public void storeInterviewModule(String token, Interview interview, InputStream interviewInputStream, String key, AsyncHttpResponseHandler handler) throws EncryptionException, IOException {
 
         RequestParams params = new RequestParams();
         params.add("code", Encrypt.encryptByRSA(Encrypt.publicServerKey, token));
@@ -29,17 +30,19 @@ public class InterviewClient {
         params.add("description", interview.getDescription());
         params.add("password", !interview.getPassword().isEmpty() ? Encrypt.encryptByRSA(Encrypt.publicServerKey, interview.getPassword()) : "");
         params.add("hash", WebClient.getHash());
-        params.put("file", interview.getInputStream());
+        params.put("file", interviewInputStream);
+        params.put("key", Encrypt.encryptByRSA(Encrypt.publicServerKey, key));
         WebClient.post("store_pi_module.php",params, handler);
 
     }
 
 
-    public void sendInterviewResults(String token, long interviewId, InputStream interviewLog, InputStream audio, String aesKey, AsyncHttpResponseHandler handler) throws EncryptionException, IOException {
+    public void sendInterviewResults(String token, long interviewId, String respondentEmail, InputStream interviewLog, InputStream audio, String aesKey, AsyncHttpResponseHandler handler) throws EncryptionException, IOException {
 
         RequestParams params = new RequestParams();
         params.add("code", Encrypt.encryptByRSA(Encrypt.publicServerKey, token));
         params.add("interview_id", String.valueOf(interviewId));
+        params.add("respondent_email", respondentEmail);
         params.add("aes_key", Encrypt.encryptByRSA(Encrypt.publicServerKey, aesKey));
         params.add("hash", WebClient.getHash());
         if(audio != null)
