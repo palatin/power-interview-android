@@ -1,6 +1,7 @@
 package example.com.powerinterview.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,7 @@ public class InterviewReportsAdapter  extends RecyclerView.Adapter<InterviewRepo
     public void onBindViewHolder(InterviewReportsAdapter.ViewHolder holder, int position) {
         InterviewReport interviewReport = interviewReports.get(position);
         holder.interviewName.setText(interviewReport.getTemplateName());
-        holder.respondentEmail.setText("Respondent email:" + interviewReport.getRespondentEmail());
+        holder.respondentEmail.setText(recyclerView.getContext().getString(R.string.respondent_email_string) + " " + interviewReport.getRespondentEmail());
         holder.date.setText(interviewReport.getDate());
     }
 

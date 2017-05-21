@@ -19,7 +19,7 @@ public class InterviewLogger {
 
 
     public static void writeToInterviewLog(String message) {
-        stringBuilder.append(message + " \n");
+        stringBuilder.append(message + "<br/>");
     }
 
     public static byte[] getResults(String encryptKey) throws Exception {

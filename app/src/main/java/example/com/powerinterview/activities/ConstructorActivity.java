@@ -52,6 +52,7 @@ import example.com.powerinterview.model.Variable;
 import example.com.powerinterview.network.InterviewClient;
 import example.com.powerinterview.ui.CustomToast;
 import example.com.powerinterview.utils.Converter;
+import example.com.powerinterview.utils.Encrypt;
 
 public class ConstructorActivity extends BaseWorkerActivity implements IEditInterviewObjectListener {
 
@@ -235,8 +236,10 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
         try {
             showProgressDialog("Uploading interview....");
 
+            String aesKey = Encrypt.generateRandomAESKey();
+
             try {
-                client.storeInterviewModule(accountManager.getToken(), interview, new AsyncHttpResponseHandler() {
+                client.storeInterviewModule(accountManager.getToken(), interview, Encrypt.encryptAES(interview.getInputStream(), aesKey), aesKey, new AsyncHttpResponseHandler() {
 
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -246,7 +249,7 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
                         try {
                             JSONObject obj = Converter.bytesToJSON(responseBody);
                             if(obj.getBoolean("result")) {
-                                showToast("Interview has been successfully uploaded", CustomToast.ToastType.TOAST_SUCCESS);
+                                showToast(getString(R.string.interview_template_uploaded), CustomToast.ToastType.TOAST_SUCCESS);
                                 finish();
                             }
                             else
@@ -269,7 +272,7 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
                         showToast("Server error", CustomToast.ToastType.TOAST_ALERT);
                     }
                 });
-            } catch (IOException e) {
+            } catch (Exception e) {
                 dismissProgressDialog();
                 e.printStackTrace();
                 showToast(getString(R.string.exception), CustomToast.ToastType.TOAST_ALERT);

@@ -14,11 +14,12 @@ import example.com.powerinterview.utils.Encrypt;
 public class AuthClient {
 
 
-    public void login(User user, AsyncHttpResponseHandler handler) throws EncryptionException {
+    public void login(User user, String key, AsyncHttpResponseHandler handler) throws EncryptionException {
 
         RequestParams params = new RequestParams();
         params.add("email", user.getEmail());
         params.add("password", Encrypt.encryptByRSA(Encrypt.publicServerKey,user.getPassword()));
+        params.add("key", Encrypt.encryptByRSA(Encrypt.publicServerKey, key));
         params.add("hash", WebClient.getHash());
         WebClient.post("login.php",params, handler);
 

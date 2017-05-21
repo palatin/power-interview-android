@@ -10,6 +10,10 @@ import com.loopj.android.http.Base64;
 import com.scottyab.aescrypt.AESCrypt;
 
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
@@ -77,6 +81,38 @@ public class Encrypt {
             byte[] encrypted = cipher.doFinal(value.getBytes());
 
             return Base64.encodeToString(encrypted, Base64.DEFAULT);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new Exception();
+        }
+
+    }
+
+    public static byte[] encryptAES(byte[] value, String key) throws Exception {
+        try {
+            byte[] bytes = "0111872818520578".getBytes("UTF-8");
+            IvParameterSpec iv = new IvParameterSpec(bytes);
+            SecretKeySpec skeySpec = new SecretKeySpec(Base64.decode(key,Base64.DEFAULT), "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+
+            byte[] encrypted = cipher.doFinal(value);
+
+            return Base64.encode(encrypted, Base64.DEFAULT);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new Exception();
+        }
+
+    }
+
+    public static InputStream encryptAES(InputStream stream, String key) throws Exception {
+        try {
+
+            byte[] encrypted = encryptAES(IOUtils.toByteArray(stream), key);
+
+
+            return new ByteArrayInputStream(encrypted);
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new Exception();
