@@ -73,4 +73,22 @@ public class InterviewClient {
         params.add("hash", WebClient.getHash());
         WebClient.post("activate_interview_code.php", params, responseHandler);
     }
+
+    public void getInterviewsReports(String token, JsonHttpResponseHandler handler) throws EncryptionException {
+
+        RequestParams params = new RequestParams();
+        params.add("code", Encrypt.encryptByRSA(Encrypt.publicServerKey, token));
+        params.add("hash", WebClient.getHash());
+        WebClient.post("get_reports.php", params, handler);
+    }
+
+    public void restoreReportKey(String token, long id, String aesKey, JsonHttpResponseHandler handler) throws EncryptionException {
+
+        RequestParams params = new RequestParams();
+        params.add("code", Encrypt.encryptByRSA(Encrypt.publicServerKey, token));
+        params.add("key", Encrypt.encryptByRSA(Encrypt.publicServerKey, aesKey));
+        params.add("id", String.valueOf(id));
+        params.add("hash", WebClient.getHash());
+        WebClient.post("restore_report_key.php", params, handler);
+    }
 }

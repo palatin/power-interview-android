@@ -10,7 +10,7 @@ import example.com.powerinterview.model.Variable;
 
 public class VariablesUtil {
 
-
+    //this method return variable type with casted inner variable to expected type
     public static Variable parseVariableToExpectType(Variable variable) {
         Object object = variable.getValue();
         if(isFloat(object)) {

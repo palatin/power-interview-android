@@ -4,17 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="example.com.powerinterview.activities.InterviewPickerActivity">
+    tools:context="example.com.powerinterview.activities.ReportsActivity">
+
+
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/interviewsRecyclerView"
+        android:id="@+id/reportsRecyclerView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="0dp" />
+
+
 
 </android.support.constraint.ConstraintLayout>

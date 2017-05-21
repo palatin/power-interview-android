@@ -46,7 +46,8 @@
         <activity android:name=".activities.InterviewPickerActivity" />
         <activity android:name=".activities.InterviewActivity" />
         <activity android:name=".activities.ManageVariablesActivity" />
-        <activity android:name=".activities.EditConditionActivity"></activity>
+        <activity android:name=".activities.EditConditionActivity" />
+        <activity android:name=".activities.ReportsActivity"></activity>
     </application>
 
 </manifest>
