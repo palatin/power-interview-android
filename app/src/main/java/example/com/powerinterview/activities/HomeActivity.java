@@ -32,7 +32,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.interview_card, R.id.constructor_card})
+    @OnClick({R.id.interview_card, R.id.constructor_card, R.id.reports_card})
     public void onMenuItemClicked(View view) {
         switch (view.getId()) {
             case R.id.interview_card:
@@ -40,6 +40,9 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             case R.id.constructor_card:
                 startActivity(new Intent(this, ConstructorActivity.class));
+                break;
+            case R.id.reports_card:
+                startActivity(new Intent(this, ReportsActivity.class));
                 break;
         }
     }

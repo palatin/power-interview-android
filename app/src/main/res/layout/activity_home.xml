@@ -145,6 +145,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="2dp"
+            android:id="@+id/reports_card"
             android:layout_weight="0.5"
             app:cardCornerRadius="5dp"
             app:cardElevation="8dp"

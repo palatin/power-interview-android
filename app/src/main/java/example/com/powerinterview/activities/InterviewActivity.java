@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -31,17 +32,21 @@ import java.util.Map;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cz.msebera.android.httpclient.Header;
 import example.com.powerinterview.R;
 import example.com.powerinterview.core.BaseInterviewController;
+import example.com.powerinterview.core.BaseQuestionController;
 import example.com.powerinterview.core.InterviewLogger;
 import example.com.powerinterview.core.PowerInterviewApp;
 import example.com.powerinterview.exceptions.ConvertException;
+import example.com.powerinterview.exceptions.EncryptionException;
 import example.com.powerinterview.exceptions.FactoryException;
 import example.com.powerinterview.exceptions.InterviewElementNotFoundException;
+import example.com.powerinterview.interfaces.IPIWidgetsFactory;
 import example.com.powerinterview.interfaces.InterviewProvider;
 import example.com.powerinterview.managers.AccountManager;
 import example.com.powerinterview.managers.InterviewsTemplatesManager;
@@ -50,6 +55,8 @@ import example.com.powerinterview.model.Variable;
 import example.com.powerinterview.network.InterviewClient;
 import example.com.powerinterview.ui.CustomToast;
 import example.com.powerinterview.utils.Converter;
+import example.com.powerinterview.utils.Encrypt;
+import example.com.powerinterview.utils.Validator;
 
 public class InterviewActivity extends BaseWorkerActivity implements InterviewProvider {
 
@@ -86,20 +93,14 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
         try {
 
             interview = interviewsTemplatesManager.loadInterviewByFile(file);
-            controller = new BaseInterviewController(this, ((PowerInterviewApp) getApplication()).getInterviewComponent().getWidgetsFactory());
+            IPIWidgetsFactory factory = ((PowerInterviewApp) getApplication()).getInterviewComponent().getWidgetsFactory();
+            controller = new BaseInterviewController(this, new BaseQuestionController(factory));
             controller.initInterview(interview);
 
-        } catch (IOException | ClassNotFoundException  e) {
+        } catch (Exception  e) {
             e.printStackTrace();
-            showToast(e.getMessage(), CustomToast.ToastType.TOAST_ALERT);
-        } catch (FactoryException e) {
-            e.printStackTrace();
-            showToast(e.getMessage(), CustomToast.ToastType.TOAST_ALERT);
-        } catch (InterviewElementNotFoundException e) {
-            e.printStackTrace();
-            showToast(e.getMessage(), CustomToast.ToastType.TOAST_ALERT);
+            handleException(e);
         }
-
 
         //clear log
         InterviewLogger.clearLog();
@@ -125,6 +126,10 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
 
     @Override
     public void endInterview() {
+
+        final EditText respondentEmail = new EditText(this);
+        respondentEmail.setHint(getString(R.string.respondent_email_string));
+        respondentEmail.setMaxEms(20);
         AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setMessage("Interview is over")
                 .setPositiveButton("Send results", new DialogInterface.OnClickListener() {
@@ -137,7 +142,13 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
                             Map.Entry<String, Variable> pair = (Map.Entry)it.next();
                             InterviewLogger.writeToInterviewLog(pair.getKey() + "---- " + pair.getValue().getValue());
                         }
-                        sendInterview();
+                        String email = respondentEmail.getText().toString();
+                        if(email.isEmpty() || !Validator.checkEmail(email)) {
+                            InterviewActivity.this.showToast("Incorrect respondent's email", CustomToast.ToastType.TOAST_ALERT);
+                            dialog.dismiss();
+                            return;
+                        }
+                        sendInterview(email);
 
                     }
                 })
@@ -147,25 +158,28 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
                         dialog.dismiss();
                     }
                 }).create();
+        alertDialog.setView(respondentEmail);
         alertDialog.show();
     }
 
-    private void sendInterview() {
-        KeyGenerator keyGen = null;
+    @Override
+    public void handleException(Exception ex) {
+        super.handleException(ex);
+    }
+
+    private void sendInterview(String respondentEmail) {
+
+        String aes = null;
         try {
-            keyGen = KeyGenerator.getInstance("AES");
-        } catch (NoSuchAlgorithmException e) {
+            aes = Encrypt.generateRandomAESKey();
+        } catch (EncryptionException e) {
             e.printStackTrace();
             return;
         }
-        keyGen.init(256);
-        SecretKey secretKey = keyGen.generateKey();
-
-        String aes = Base64.encodeToString(secretKey.getEncoded(), Base64.DEFAULT);
 
         try {
-            showProgressDialog("Uploading....");
-            interviewClient.sendInterviewResults(accountManager.getToken(), interviewID, new ByteArrayInputStream(InterviewLogger.getResults(aes)),null, aes,
+            showProgressDialog(getString(R.string.uploading));
+            interviewClient.sendInterviewResults(accountManager.getToken(), interviewID, respondentEmail, new ByteArrayInputStream(InterviewLogger.getResults(aes)),null, aes,
                 new JsonHttpResponseHandler() {
 
                     @Override
@@ -199,7 +213,7 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
 
     private void showSuccessDialog(String key) {
         AlertDialog alertDialog = new AlertDialog.Builder(this)
-                .setMessage("Interview has been successfully uploaded \n" + "Your secret key - " + key)
+                .setMessage(getString(R.string.inrerview_upload_success)  + key)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -208,7 +222,6 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
                     }
                 })
                 .create();
-        alertDialog.setCancelable(false);
         alertDialog.show();
     }
 

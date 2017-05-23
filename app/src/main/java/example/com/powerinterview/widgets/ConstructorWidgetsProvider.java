@@ -35,7 +35,6 @@ public class ConstructorWidgetsProvider implements IWidgetsProvider {
 
         Widget[] widgets = new Widget[widgetsClasses.length];
 
-
         int i = 0;
         for (Class widgetClass: widgetsClasses) {
             WidgetEntity widgetEntity = new WidgetEntity();

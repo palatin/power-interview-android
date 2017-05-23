@@ -14,7 +14,7 @@
         completions."
     </string>
     <string name="register">Register</string>
-    <string name="title_activity_constructor">ConstructorActivity</string>
+    <string name="title_activity_constructor">Templates Constructor</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="delete">Delete</string>
@@ -29,5 +29,15 @@
     <string name="add_condition">Add condition block</string>
     <string name="manage_variables">Manage variables</string>
     <string name="add_variable">Add variable</string>
+    <string name="autologin_permission">To implement the autologin, app need permission to receive information about the phone.</string>
+    <string name="restore_report_key">Do you want to recover the secret code?</string>
+    <string name="uploading">Uploading....</string>
+    <string name="inrerview_upload_success">Interview has been successfully uploaded\nYour secret key -\u00A0</string>
+    <string name="new_report_key">Your new key -\u00A0</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="interview_template_uploaded">Interview has been successfully uploaded</string>
+    <string name="respondent_email_string">Respondent\'s email:</string>
+    <string name="exception_occured">Ohhh some exception occured</string>
+    <string name="forgot_password">forgot password</string>
 
 </resources>

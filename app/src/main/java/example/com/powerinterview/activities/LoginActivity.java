@@ -35,6 +35,7 @@ import example.com.powerinterview.model.User;
 import example.com.powerinterview.network.AuthClient;
 import example.com.powerinterview.ui.CustomToast;
 import example.com.powerinterview.utils.Converter;
+import example.com.powerinterview.utils.Encrypt;
 
 public class LoginActivity extends BaseWorkerActivity implements Validator.ValidationListener {
 
@@ -108,7 +109,9 @@ public class LoginActivity extends BaseWorkerActivity implements Validator.Valid
 
             showProgressDialog("Loading account....");
 
-            client.login(user, new AsyncHttpResponseHandler() {
+            final String key = Encrypt.generateRandomAESKey();
+
+            client.login(user, key, new AsyncHttpResponseHandler() {
 
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -119,7 +122,7 @@ public class LoginActivity extends BaseWorkerActivity implements Validator.Valid
                         JSONObject obj = Converter.bytesToJSON(responseBody);
                         if(obj.getBoolean("result")) {
                             accountManager.storeAccount(user, LoginActivity.this);
-                            accountManager.setToken(obj.getString("token"));
+                            accountManager.setToken(Encrypt.decryptAES(obj.getString("token"), key));
                             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                             finish();
                         }

@@ -3,6 +3,7 @@ package example.com.powerinterview.network;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -21,25 +22,27 @@ import example.com.powerinterview.utils.Encrypt;
 public class InterviewClient {
 
 
-    public void storeInterviewModule(String token, Interview interview, AsyncHttpResponseHandler handler) throws EncryptionException, IOException {
+    public void storeInterviewModule(String token, Interview interview, String password, InputStream interviewInputStream, String key, AsyncHttpResponseHandler handler) throws EncryptionException, IOException {
 
         RequestParams params = new RequestParams();
         params.add("code", Encrypt.encryptByRSA(Encrypt.publicServerKey, token));
         params.add("name", interview.getName());
         params.add("description", interview.getDescription());
-        params.add("password", !interview.getPassword().isEmpty() ? Encrypt.encryptByRSA(Encrypt.publicServerKey, interview.getPassword()) : "");
+        params.add("password", !password.isEmpty() ? Encrypt.encryptByRSA(Encrypt.publicServerKey, password) : "");
         params.add("hash", WebClient.getHash());
-        params.put("file", interview.getInputStream());
+        params.put("file", interviewInputStream);
+        params.put("key", Encrypt.encryptByRSA(Encrypt.publicServerKey, key));
         WebClient.post("store_pi_module.php",params, handler);
 
     }
 
 
-    public void sendInterviewResults(String token, long interviewId, InputStream interviewLog, InputStream audio, String aesKey, AsyncHttpResponseHandler handler) throws EncryptionException, IOException {
+    public void sendInterviewResults(String token, long interviewId, String respondentEmail, InputStream interviewLog, InputStream audio, String aesKey, AsyncHttpResponseHandler handler) throws EncryptionException, IOException {
 
         RequestParams params = new RequestParams();
         params.add("code", Encrypt.encryptByRSA(Encrypt.publicServerKey, token));
         params.add("interview_id", String.valueOf(interviewId));
+        params.add("respondent_email", respondentEmail);
         params.add("aes_key", Encrypt.encryptByRSA(Encrypt.publicServerKey, aesKey));
         params.add("hash", WebClient.getHash());
         if(audio != null)
@@ -72,5 +75,23 @@ public class InterviewClient {
         params.add("interview_code", Encrypt.encryptByRSA(Encrypt.publicServerKey, interviewCode));
         params.add("hash", WebClient.getHash());
         WebClient.post("activate_interview_code.php", params, responseHandler);
+    }
+
+    public void getInterviewsReports(String token, JsonHttpResponseHandler handler) throws EncryptionException {
+
+        RequestParams params = new RequestParams();
+        params.add("code", Encrypt.encryptByRSA(Encrypt.publicServerKey, token));
+        params.add("hash", WebClient.getHash());
+        WebClient.post("get_reports.php", params, handler);
+    }
+
+    public void restoreReportKey(String token, long id, String aesKey, JsonHttpResponseHandler handler) throws EncryptionException {
+
+        RequestParams params = new RequestParams();
+        params.add("code", Encrypt.encryptByRSA(Encrypt.publicServerKey, token));
+        params.add("key", Encrypt.encryptByRSA(Encrypt.publicServerKey, aesKey));
+        params.add("id", String.valueOf(id));
+        params.add("hash", WebClient.getHash());
+        WebClient.post("restore_report_key.php", params, handler);
     }
 }

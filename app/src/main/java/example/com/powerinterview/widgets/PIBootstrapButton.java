@@ -25,7 +25,6 @@ public class PIBootstrapButton extends BaseWidget implements Widget, View.OnClic
 
 
     protected BootstrapButton view;
-    private ActionListener listener;
 
     public PIBootstrapButton(List<Attribute> attributes, List<Action> actions, Context context) {
         super(attributes, actions);
@@ -48,6 +47,7 @@ public class PIBootstrapButton extends BaseWidget implements Widget, View.OnClic
         layoutParams.setMargins(0, 60, 0, 0);
 
         view.setLayoutParams(layoutParams);
+
         setViewAttributes();
     }
 
@@ -60,6 +60,12 @@ public class PIBootstrapButton extends BaseWidget implements Widget, View.OnClic
         List<Attribute> attributes = getAttributes();
         int index = attributes.indexOf(attribute);
         return index == - 1 ? view.getText().toString() : attributes.get(index).getValue();
+    }
+
+    @Override
+    public void setAttributes(List<Attribute> attributes) {
+        super.setAttributes(attributes);
+        setViewAttributes();
     }
 
     private void setViewAttributes() {

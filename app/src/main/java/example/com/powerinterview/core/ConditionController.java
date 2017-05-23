@@ -20,6 +20,7 @@ public class ConditionController {
     }
 
 
+
     public void produceConditionBlock(ConditionBlock conditionBlock) {
 
         List<Condition> conditions = conditionBlock.getConditions();
@@ -29,6 +30,8 @@ public class ConditionController {
             }
         }
     }
+
+
 
     private boolean checkCondition(Condition condition) {
         Variable letSideVariable = controller.getVariable(condition.getLeftSide());

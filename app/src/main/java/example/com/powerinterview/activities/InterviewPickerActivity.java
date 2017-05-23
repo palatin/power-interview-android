@@ -100,6 +100,15 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
             client.getInterviewsModules(accountManager.getToken(), new JsonHttpResponseHandler() {
 
                 @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+                        displayResult(response);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 
                     writeDebugLog("Interview loader", "list of interviews loaded " + response.toString());
@@ -143,6 +152,10 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
         unbinder.unbind();
     }
 
+    /**
+     * Method that call if user pick some template from list
+     * @param interviewTemplate - picked template
+     */
     @Override
     public void onInterviewPicked(InterviewTemplate interviewTemplate) {
 
@@ -162,6 +175,10 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
 
     }
 
+    /**
+     * Method laod the interview template file and then if success start interview activity
+     * @param interviewTemplate - template chose by user
+     */
     private void loadTemplate(final InterviewTemplate interviewTemplate) {
 
         try {
@@ -193,6 +210,7 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
                                     File file = interviewsTemplatesManager.getFileTemplateById(interviewTemplate.getId(), getApplicationContext());
                                     Intent intent = new Intent(InterviewPickerActivity.this, InterviewActivity.class);
                                     intent.putExtra("template", file);
+                                    intent.putExtra("id", interviewTemplate.getId());
                                     startActivity(intent);
                                     finish();
                                 } catch (IOException e) {
@@ -219,6 +237,10 @@ public class InterviewPickerActivity extends BaseWorkerActivity implements Inter
         }
     }
 
+    /**
+     * Method thar activate secred code to provide templates's access
+     * @param code
+     */
     private void activateCode(String code) {
         if(code.isEmpty())
             return;

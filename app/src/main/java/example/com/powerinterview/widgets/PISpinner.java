@@ -49,6 +49,12 @@ public class PISpinner extends BaseWidget implements Widget, MaterialSpinner.OnI
 
     }
 
+    @Override
+    public void setAttributes(List<Attribute> attributes) {
+        super.setAttributes(attributes);
+        setViewAttributes();
+    }
+
 
 
 

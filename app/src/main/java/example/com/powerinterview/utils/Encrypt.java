@@ -10,6 +10,10 @@ import com.loopj.android.http.Base64;
 import com.scottyab.aescrypt.AESCrypt;
 
 
+import org.apache.commons.io.IOUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
@@ -18,6 +22,8 @@ import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -49,6 +55,21 @@ public class Encrypt {
         }
     }
 
+    public static String generateRandomAESKey() throws EncryptionException {
+        KeyGenerator keyGen = null;
+        try {
+            keyGen = KeyGenerator.getInstance("AES");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            throw new EncryptionException(e.getMessage());
+        }
+        keyGen.init(256);
+        SecretKey secretKey = keyGen.generateKey();
+
+        String aes = android.util.Base64.encodeToString(secretKey.getEncoded(), android.util.Base64.DEFAULT);
+        return aes;
+    }
+
     public static String encryptAES(String value, String key) throws Exception {
         try {
             byte[] bytes = "0111872818520578".getBytes("UTF-8");
@@ -60,6 +81,56 @@ public class Encrypt {
             byte[] encrypted = cipher.doFinal(value.getBytes());
 
             return Base64.encodeToString(encrypted, Base64.DEFAULT);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new Exception();
+        }
+
+    }
+
+    public static byte[] encryptAES(byte[] value, String key) throws Exception {
+        try {
+            byte[] bytes = "0111872818520578".getBytes("UTF-8");
+            IvParameterSpec iv = new IvParameterSpec(bytes);
+            SecretKeySpec skeySpec = new SecretKeySpec(Base64.decode(key,Base64.DEFAULT), "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+
+            byte[] encrypted = cipher.doFinal(value);
+
+            return Base64.encode(encrypted, Base64.DEFAULT);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new Exception();
+        }
+
+    }
+
+    public static InputStream encryptAES(InputStream stream, String key) throws Exception {
+        try {
+
+            byte[] encrypted = encryptAES(IOUtils.toByteArray(stream), key);
+
+
+            return new ByteArrayInputStream(encrypted);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new Exception();
+        }
+
+    }
+
+    public static String decryptAES(String value, String key) throws Exception {
+        try {
+            byte[] bytes = "0111872818520578".getBytes("UTF-8");
+            IvParameterSpec iv = new IvParameterSpec(bytes);
+            SecretKeySpec skeySpec = new SecretKeySpec(android.util.Base64.decode(key, Base64.DEFAULT), "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
+
+            byte[] decrypted = cipher.doFinal(android.util.Base64.decode(value, android.util.Base64.DEFAULT));
+
+            return new String(decrypted, "UTF-8");
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new Exception();

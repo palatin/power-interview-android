@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import example.com.powerinterview.core.AppConfig;
+import example.com.powerinterview.core.PowerInterviewApp;
 import example.com.powerinterview.ui.CustomToast;
 
 /**
@@ -55,14 +56,21 @@ public class BaseWorkerActivity extends AppCompatActivity {
     protected boolean displayResult(JSONObject obj) throws JSONException {
         CustomToast.ToastType toastType = obj.getString("type").equals("success") ? CustomToast.ToastType.TOAST_SUCCESS : CustomToast.ToastType.TOAST_ALERT;
         try {
-            String message = obj.getString("msg");
-            showToast(message, toastType);
+            if(obj.has("msg")) {
+                String message = obj.getString("msg");
+                showToast(message, toastType);
+            }
+
         }
         catch (Exception ex) {
             ex.printStackTrace();
         }
 
         return obj.getBoolean("result");
+    }
+
+    protected void handleException(Exception ex) {
+        ((PowerInterviewApp) getApplication()).handleException(ex);
     }
 
 }

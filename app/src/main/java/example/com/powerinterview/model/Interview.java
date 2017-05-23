@@ -25,10 +25,10 @@ import example.com.powerinterview.ui.CustomToast;
 public class Interview implements Serializable, Parcelable{
 
 
-    private static final long serialVersionUID = 5964231270107791129L;
+    private static final long serialVersionUID = -286977446330471723L;
     private String name;
     private String description;
-    private String password;
+
 
     private List<InterviewObject> interviewObjects;
 
@@ -62,13 +62,9 @@ public class Interview implements Serializable, Parcelable{
         this.description = description;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+
+
 
     @Override
     public int describeContents() {
@@ -79,14 +75,12 @@ public class Interview implements Serializable, Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.name);
         dest.writeString(this.description);
-        dest.writeString(this.password);
         dest.writeTypedList(this.interviewObjects);
     }
 
     protected Interview(Parcel in) {
         this.name = in.readString();
         this.description = in.readString();
-        this.password = in.readString();
         in.readList(interviewObjects, InterviewObject.class.getClassLoader());
     }
 
