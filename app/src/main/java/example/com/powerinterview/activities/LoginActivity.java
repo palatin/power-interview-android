@@ -172,6 +172,12 @@ public class LoginActivity extends BaseWorkerActivity implements Validator.Valid
         }
     }
 
+    @OnClick(R.id.register_button)
+    public void register() {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
+    }
+
 
     @Override
     protected void onDestroy() {
