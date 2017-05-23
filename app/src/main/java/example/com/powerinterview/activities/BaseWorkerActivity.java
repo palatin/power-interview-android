@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import example.com.powerinterview.core.AppConfig;
+import example.com.powerinterview.core.PowerInterviewApp;
 import example.com.powerinterview.ui.CustomToast;
 
 /**
@@ -66,6 +67,10 @@ public class BaseWorkerActivity extends AppCompatActivity {
         }
 
         return obj.getBoolean("result");
+    }
+
+    protected void handleException(Exception ex) {
+        ((PowerInterviewApp) getApplication()).handleException(ex);
     }
 
 }

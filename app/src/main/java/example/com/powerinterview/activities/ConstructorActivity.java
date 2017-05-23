@@ -222,8 +222,7 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
                     public void onClick(DialogInterface dialog, int which) {
                         interview.setName(interviewName.getText().toString());
                         interview.setDescription(description.getText().toString());
-                        interview.setPassword(password.getText().toString());
-                        uploadInterview(interview);
+                        uploadInterview(interview, password.getText().toString());
                     }
                 })
                 .create();
@@ -231,7 +230,7 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
 
     }
 
-    private void uploadInterview(Interview interview) {
+    private void uploadInterview(Interview interview, String password) {
 
         try {
             showProgressDialog("Uploading interview....");
@@ -239,7 +238,7 @@ public class ConstructorActivity extends BaseWorkerActivity implements IEditInte
             String aesKey = Encrypt.generateRandomAESKey();
 
             try {
-                client.storeInterviewModule(accountManager.getToken(), interview, Encrypt.encryptAES(interview.getInputStream(), aesKey), aesKey, new AsyncHttpResponseHandler() {
+                client.storeInterviewModule(accountManager.getToken(), interview, password, Encrypt.encryptAES(interview.getInputStream(), aesKey), aesKey, new AsyncHttpResponseHandler() {
 
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
