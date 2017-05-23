@@ -85,7 +85,7 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:text="@string/register"
             android:textAlignment="center"
             app:bootstrapBrand="success"
@@ -95,6 +95,18 @@
             app:layout_constraintTop_toBottomOf="@+id/sign_in_button"
             app:roundedCorners="true"
             app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginEnd="0dp" />
+
+        <example.com.powerinterview.ui.IOSStyledButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/forgotPassword"
+            android:text="@string/forgot_password"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/register_button"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="0dp"
+            app:layout_constraintEnd_toEndOf="@+id/register_button"
             android:layout_marginEnd="0dp" />
 
     </android.support.constraint.ConstraintLayout>

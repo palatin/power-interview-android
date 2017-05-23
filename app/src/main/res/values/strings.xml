@@ -37,5 +37,7 @@
     <string name="please_wait">Please wait...</string>
     <string name="interview_template_uploaded">Interview has been successfully uploaded</string>
     <string name="respondent_email_string">Respondent\'s email:</string>
+    <string name="exception_occured">Ohhh some exception occured</string>
+    <string name="forgot_password">forgot password</string>
 
 </resources>

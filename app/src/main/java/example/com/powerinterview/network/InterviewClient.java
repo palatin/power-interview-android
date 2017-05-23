@@ -22,13 +22,13 @@ import example.com.powerinterview.utils.Encrypt;
 public class InterviewClient {
 
 
-    public void storeInterviewModule(String token, Interview interview, InputStream interviewInputStream, String key, AsyncHttpResponseHandler handler) throws EncryptionException, IOException {
+    public void storeInterviewModule(String token, Interview interview, String password, InputStream interviewInputStream, String key, AsyncHttpResponseHandler handler) throws EncryptionException, IOException {
 
         RequestParams params = new RequestParams();
         params.add("code", Encrypt.encryptByRSA(Encrypt.publicServerKey, token));
         params.add("name", interview.getName());
         params.add("description", interview.getDescription());
-        params.add("password", !interview.getPassword().isEmpty() ? Encrypt.encryptByRSA(Encrypt.publicServerKey, interview.getPassword()) : "");
+        params.add("password", !password.isEmpty() ? Encrypt.encryptByRSA(Encrypt.publicServerKey, password) : "");
         params.add("hash", WebClient.getHash());
         params.put("file", interviewInputStream);
         params.put("key", Encrypt.encryptByRSA(Encrypt.publicServerKey, key));

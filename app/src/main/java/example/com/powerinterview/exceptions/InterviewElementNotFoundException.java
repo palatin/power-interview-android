@@ -4,7 +4,7 @@ package example.com.powerinterview.exceptions;
  * Created by Игорь on 06.05.2017.
  */
 
-public class InterviewElementNotFoundException extends Exception {
+public class InterviewElementNotFoundException extends InterviewException {
 
 
     public InterviewElementNotFoundException() {
@@ -12,6 +12,6 @@ public class InterviewElementNotFoundException extends Exception {
     }
 
     public InterviewElementNotFoundException(String msg) {
-        super(msg);
+        super("Interview element not found " +msg);
     }
 }

@@ -2,6 +2,8 @@ package example.com.powerinterview.model;
 
 import java.io.Serializable;
 
+import example.com.powerinterview.utils.VariablesUtil;
+
 /**
  * Created by Игорь on 07.05.2017.
  */
@@ -42,7 +44,15 @@ public class Variable implements Serializable {
         this.type = type;
     }
 
+    /**
+     * method determine expected variable type
+     * @param object type that we want to cast
+     * @return casted object
+     */
     public Object castObjectToSameType(Object object) {
+        //if in some reason type not set
+        if(type == null)
+            type = VariablesUtil.parseVariableToExpectType(this).getType();
         Type type = getType();
         if (type.equals(Type.Number)) {
             return Float.parseFloat(object.toString());

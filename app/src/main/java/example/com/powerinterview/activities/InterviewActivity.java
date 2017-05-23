@@ -39,12 +39,14 @@ import butterknife.Unbinder;
 import cz.msebera.android.httpclient.Header;
 import example.com.powerinterview.R;
 import example.com.powerinterview.core.BaseInterviewController;
+import example.com.powerinterview.core.BaseQuestionController;
 import example.com.powerinterview.core.InterviewLogger;
 import example.com.powerinterview.core.PowerInterviewApp;
 import example.com.powerinterview.exceptions.ConvertException;
 import example.com.powerinterview.exceptions.EncryptionException;
 import example.com.powerinterview.exceptions.FactoryException;
 import example.com.powerinterview.exceptions.InterviewElementNotFoundException;
+import example.com.powerinterview.interfaces.IPIWidgetsFactory;
 import example.com.powerinterview.interfaces.InterviewProvider;
 import example.com.powerinterview.managers.AccountManager;
 import example.com.powerinterview.managers.InterviewsTemplatesManager;
@@ -91,20 +93,14 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
         try {
 
             interview = interviewsTemplatesManager.loadInterviewByFile(file);
-            controller = new BaseInterviewController(this, ((PowerInterviewApp) getApplication()).getInterviewComponent().getWidgetsFactory());
+            IPIWidgetsFactory factory = ((PowerInterviewApp) getApplication()).getInterviewComponent().getWidgetsFactory();
+            controller = new BaseInterviewController(this, new BaseQuestionController(factory));
             controller.initInterview(interview);
 
-        } catch (IOException | ClassNotFoundException  e) {
+        } catch (Exception  e) {
             e.printStackTrace();
-            showToast(e.getMessage(), CustomToast.ToastType.TOAST_ALERT);
-        } catch (FactoryException e) {
-            e.printStackTrace();
-            showToast(e.getMessage(), CustomToast.ToastType.TOAST_ALERT);
-        } catch (InterviewElementNotFoundException e) {
-            e.printStackTrace();
-            showToast(e.getMessage(), CustomToast.ToastType.TOAST_ALERT);
+            handleException(e);
         }
-
 
         //clear log
         InterviewLogger.clearLog();
@@ -164,6 +160,11 @@ public class InterviewActivity extends BaseWorkerActivity implements InterviewPr
                 }).create();
         alertDialog.setView(respondentEmail);
         alertDialog.show();
+    }
+
+    @Override
+    public void handleException(Exception ex) {
+        super.handleException(ex);
     }
 
     private void sendInterview(String respondentEmail) {

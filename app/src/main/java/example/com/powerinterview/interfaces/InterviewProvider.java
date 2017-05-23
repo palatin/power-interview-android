@@ -13,6 +13,8 @@ public interface InterviewProvider {
 
     void endInterview();
 
+    void handleException(Exception ex);
+
     Context getContext();
 
 }

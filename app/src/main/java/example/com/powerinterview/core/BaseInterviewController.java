@@ -2,12 +2,14 @@ package example.com.powerinterview.core;
 
 import android.content.Context;
 
+import example.com.powerinterview.exceptions.EmptyQuestionException;
 import example.com.powerinterview.exceptions.FactoryException;
 import example.com.powerinterview.exceptions.InterviewElementNotFoundException;
-import example.com.powerinterview.factories.PIWidgetsFactory;
+import example.com.powerinterview.exceptions.InterviewException;
 import example.com.powerinterview.interfaces.IPIWidgetsFactory;
 import example.com.powerinterview.interfaces.InterviewController;
 import example.com.powerinterview.interfaces.InterviewProvider;
+import example.com.powerinterview.interfaces.QuestionController;
 import example.com.powerinterview.model.ConditionBlock;
 import example.com.powerinterview.model.Interview;
 import example.com.powerinterview.model.InterviewObject;
@@ -24,26 +26,29 @@ public class BaseInterviewController implements InterviewController {
     private Interview interview;
     private int currentId;
     private Context context;
-    private QuestionController questionController;
-    private ConditionController conditionController;
-    private IPIWidgetsFactory factory;
+    private QuestionController baseQuestionController;
+    private ConditionController baseConditionController;
 
 
-    public BaseInterviewController(InterviewProvider provider, IPIWidgetsFactory factory) {
+    public BaseInterviewController(InterviewProvider provider, QuestionController controller) {
         this.provider = provider;
         this.context = provider.getContext();
-        this.factory = factory;
-        questionController = new QuestionController(this, factory);
-        conditionController = new ConditionController(this);
+        baseQuestionController = controller;
+        baseConditionController = new ConditionController(this);
+        baseQuestionController.subscribe(this);
     }
 
-    public void initInterview(Interview interview) throws InterviewElementNotFoundException, FactoryException {
+    public void initInterview(Interview interview) throws InterviewException, FactoryException {
         this.interview = interview;
+
+        if(interview.getInterviewObjects() == null || interview.getInterviewObjects().isEmpty())
+            throw new InterviewException("Seems like interview is empty");
+
         currentId = 0;
         parseInterviewObjects();
     }
 
-    private void parseInterviewObjects() throws InterviewElementNotFoundException, FactoryException {
+    private void parseInterviewObjects() throws InterviewElementNotFoundException, FactoryException, EmptyQuestionException {
         InterviewObject object = getObjectById(currentId);
         produceInterviewObject(object);
     }
@@ -51,20 +56,22 @@ public class BaseInterviewController implements InterviewController {
 
     private InterviewObject getObjectById(int id) throws InterviewElementNotFoundException {
 
+
+
         for(InterviewObject obj : interview.getInterviewObjects()) {
             if(id == obj.getId())
                 return obj;
         }
 
-        throw new InterviewElementNotFoundException();
+        throw new InterviewElementNotFoundException("id=2" + String.valueOf(id));
     }
 
-    private void produceInterviewObject(InterviewObject object) throws FactoryException {
+    private void produceInterviewObject(InterviewObject object) throws FactoryException, EmptyQuestionException {
         if(object instanceof Question) {
-            provider.displayViews(questionController.parseQuestion((Question) object, context));
+            provider.displayViews(baseQuestionController.parseQuestion((Question) object, context));
         }
         else if(object instanceof ConditionBlock) {
-            conditionController.produceConditionBlock((ConditionBlock) object);
+            baseConditionController.produceConditionBlock((ConditionBlock) object);
         }
     }
 
@@ -78,10 +85,9 @@ public class BaseInterviewController implements InterviewController {
         currentId = id;
         try {
             parseInterviewObjects();
-        } catch (InterviewElementNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (FactoryException e) {
-            e.printStackTrace();
+            provider.handleException(e);
         }
     }
 
