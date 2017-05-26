@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.childfirst.activities.RegisterActivity"
+    tools:context="example.com.powerinterview.activities.RegisterActivity"
     android:background="@color/colorPrimary">
 
     <android.support.constraint.ConstraintLayout
