@@ -1,14 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
+    xmlns:tools="http://schemas.android.com/tools"
     package="example.com.powerinterview">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
+        android:name=".core.PowerInterviewApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup">
+        <meta-data
+            android:name="DATABASE"
+            android:value="PowerInterview.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="example.com.powerinterview.model" />
+
+        <activity android:name=".activities.LoginActivity" />
+        <activity
+            android:name=".activities.ConstructorActivity"
+            android:label="@string/title_activity_constructor"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.EditQuestionActivity" />
+        <activity android:name=".activities.HomeActivity" />
+        <activity android:name=".activities.LaunchActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.InterviewPickerActivity" />
+        <activity android:name=".activities.InterviewActivity" />
+        <activity android:name=".activities.ManageVariablesActivity" />
+        <activity android:name=".activities.EditConditionActivity" />
+
+        <activity android:name=".activities.RegisterActivity"></activity>
+
+        <activity android:name=".activities.ReportsActivity" />
+        <activity android:name=".activities.ExceptionActivity"></activity>
 
     </application>
 
